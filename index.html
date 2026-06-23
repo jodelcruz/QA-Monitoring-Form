@@ -157,7 +157,9 @@
         <div class="field col-span-2"><label>Organization &amp; Exam Name</label><input type="text" id="f-org-exam" placeholder="Enter organization and exam name"></div>
         <div class="field col-span-2"><label>Session URL</label><input type="url" id="f-session-url" placeholder="https://..."></div>
         <div class="field"><label>Date Evaluated</label><input type="date" id="f-date-eval"></div>
-        <div class="field"><label>Reservation Code</label><input type="text" id="f-res-code" placeholder="Enter reservation code"></div>
+        <div class="field"><label>Reservation Code</label><input type="text" id="f-res-code" placeholder="e.g. ABC-12345" onblur="checkReservationCode(this)" oninput="validateResCodeFormat(this)">
+          <div id="res-code-msg" style="display:none;font-size:11.5px;font-weight:600;margin-top:3px;"></div>
+        </div>
         <div class="field"><label>Evaluated By</label>
           <select id="f-eval-by">
             <option value="">— Select Evaluator —</option>
@@ -373,6 +375,59 @@ function getRating(s) {
 }
 function g(id) { const el = document.getElementById(id); return el ? el.value.trim() : ''; }
 
+function validateResCodeFormat(input) {
+  const code = input.value.trim();
+  const msg = document.getElementById('res-code-msg');
+  if (!code) { msg.style.display = 'none'; return; }
+  if (code.indexOf('-') === -1) {
+    input.classList.add('err');
+    msg.style.display = 'block';
+    msg.style.color = '#c0392b';
+    msg.textContent = '✕ Reservation Code must contain a dash ( - ) character.';
+  } else {
+    input.classList.remove('err');
+    msg.style.display = 'none';
+  }
+}
+
+function checkReservationCode(input) {
+  const code = input.value.trim();
+  const msg = document.getElementById('res-code-msg');
+  if (!code) { msg.style.display = 'none'; return; }
+
+  // Dash format check first
+  if (code.indexOf('-') === -1) {
+    input.classList.add('err');
+    msg.style.display = 'block';
+    msg.style.color = '#c0392b';
+    msg.textContent = '✕ Reservation Code must contain a dash ( - ) character.';
+    return;
+  }
+
+  // Show checking state
+  msg.style.display = 'block';
+  msg.style.color = '#556b62';
+  msg.textContent = 'Checking reservation code…';
+
+  const params = new URLSearchParams({ action: 'checkDuplicate', code: code });
+  jsonpGet(SCRIPT_URL + '?' + params.toString())
+    .then(function(result) {
+      if (result.status === 'duplicate') {
+        input.classList.add('err');
+        msg.style.color = '#c0392b';
+        msg.textContent = '✕ Reservation Code "' + code + '" has already been submitted.';
+      } else {
+        input.classList.remove('err');
+        msg.style.color = '#1a3d2b';
+        msg.textContent = '✓ Reservation Code is available.';
+      }
+    })
+    .catch(function() {
+      msg.style.color = '#556b62';
+      msg.textContent = 'Could not verify. Code will be checked on submission.';
+    });
+}
+
 function addRecord() {
   const reqFields = ['f-proctor','f-session-date','f-org-exam','f-session-url','f-date-eval','f-res-code','f-eval-by','f-comments'];
   let ok = true;
@@ -387,6 +442,19 @@ function addRecord() {
     else el.classList.remove('err');
   });
   if (!ok) { showToast('Please fill in all required fields.', 'error'); return; }
+
+  // Validate reservation code contains a dash
+  const resCodeVal = g('f-res-code');
+  if (resCodeVal.indexOf('-') === -1) {
+    const el = document.getElementById('f-res-code');
+    el.classList.add('err');
+    const msg = document.getElementById('res-code-msg');
+    msg.style.display = 'block';
+    msg.style.color = '#c0392b';
+    msg.textContent = '✕ Reservation Code must contain a dash ( - ) character.';
+    showToast('Reservation Code must contain a dash ( - ) character.', 'error', 4000);
+    return;
+  }
 
   const btn = document.getElementById('submit-btn');
   btn.textContent = 'Submitting…'; btn.disabled = true;
@@ -428,6 +496,8 @@ function resetForm() {
   ['f-proctor','f-session-date','f-org-exam','f-session-url','f-date-eval','f-res-code','f-eval-by','f-comments']
     .forEach(function(id) { const el = document.getElementById(id); if(el) { el.value = ''; el.classList.remove('err'); } });
   CAT_IDS.forEach(function(id) { const el = document.getElementById(id); if(el) { el.value = ''; el.classList.remove('err'); } });
+  const msg = document.getElementById('res-code-msg');
+  if (msg) { msg.style.display = 'none'; msg.textContent = ''; }
 }
 
 function renderManagerView() {
