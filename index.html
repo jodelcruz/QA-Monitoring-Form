@@ -418,7 +418,7 @@
   function loadMgr() {
     var tbl=document.getElementById('tbl'), meta=document.getElementById('mgr-meta');
     tbl.innerHTML='<div class="empty">Loading records…</div>'; meta.textContent='Loading…';
-    jsonp(SCRIPT_URL + '?action=get')
+    jsonp(SCRIPT_URL + '?action=get&t=' + Date.now())
       .then(function(result){
         _rows = (result.status==='ok'&&result.data) ? result.data : [];
         meta.textContent = _rows.length+' record'+(_rows.length!==1?'s':'')+' total';
@@ -456,7 +456,7 @@
 
   // ── Report ─────────────────────────────────────────────────────────
   function loadRowsForReport() {
-    jsonp(SCRIPT_URL + '?action=get')
+    jsonp(SCRIPT_URL + '?action=get&t=' + Date.now())
       .then(function(result){
         _rows = (result.status==='ok'&&result.data) ? result.data : [];
         generateReport();
@@ -502,8 +502,28 @@
       rptTbl.innerHTML='<div class="empty">Select a week or date range above to generate the report.</div>';
       rptMeta.textContent='Select a week to generate the report.'; return;
     }
+    // Always fetch fresh data before computing
+    rptTbl.innerHTML='<div class="empty">Loading data…</div>';
+    rptMeta.textContent='Loading…';
+    jsonp(SCRIPT_URL + '?action=get&t=' + Date.now())
+      .then(function(result){
+        _rows = (result.status==='ok'&&result.data) ? result.data : [];
+        buildReport();
+      })
+      .catch(function(){
+        buildReport();
+      });
+  }
+
+  function buildReport() {
+    var rptTbl=document.getElementById('rpt-tbl'), rptMeta=document.getElementById('rpt-meta');
+    var weekStr=document.getElementById('rpt-week').value;
+    var fromStr=document.getElementById('rpt-from').value;
+    var toStr=document.getElementById('rpt-to').value;
+
     if (!_rows.length) {
-      rptTbl.innerHTML='<div class="empty">No records loaded yet. Please open Manager View first to load data, then come back.</div>'; return;
+      rptTbl.innerHTML='<div class="empty">No records found. Please try again.</div>';
+      rptMeta.textContent='No records'; return;
     }
     var start, end, periodLabel;
     if (weekStr) {
