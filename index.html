@@ -12,18 +12,14 @@
     --black:#0d0d0d; --white:#ffffff; --off:#f7faf8; --bd:#c4ddd0; --tm:#556b62;
   }
   body { font-family:'Inter',sans-serif; background:var(--off); color:var(--black); min-height:100vh; }
-
   .hdr { background:var(--gd); padding:20px 32px 16px; border-bottom:4px solid var(--ga); }
   .hdr-badge { font-family:'Space Grotesk',sans-serif; font-size:9px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--ga); background:rgba(76,175,119,.15); border:1px solid rgba(76,175,119,.4); padding:2px 10px; border-radius:3px; margin-bottom:5px; display:inline-block; }
   .hdr h1 { font-family:'Space Grotesk',sans-serif; font-size:24px; font-weight:700; color:#fff; letter-spacing:-.5px; }
-
   .tab-nav { background:var(--gd); display:flex; padding:0 32px; border-bottom:4px solid var(--ga); }
   .tab-btn { font-family:'Space Grotesk',sans-serif; font-size:13px; font-weight:600; color:#fff; background:none; border:none; padding:12px 20px; cursor:pointer; border-bottom:3px solid transparent; margin-bottom:-4px; letter-spacing:.3px; }
   .tab-btn.active { border-bottom-color:var(--ga); }
   .tab-btn:hover:not(.active) { border-bottom-color:rgba(76,175,119,.4); }
   .tab-panel { display:none; } .tab-panel.active { display:block; }
-
-  /* FORM */
   .form-body { max-width:1060px; margin:0 auto; padding:28px 20px 50px; display:flex; flex-direction:column; gap:24px; }
   .card { background:var(--white); border:1px solid var(--bd); border-radius:10px; overflow:hidden; }
   .card-hdr { background:var(--gd); padding:10px 20px; }
@@ -39,7 +35,6 @@
   .fld textarea { resize:vertical; min-height:80px; }
   .fld input.err,.fld select.err,.fld textarea.err { border-color:#c0392b !important; }
   .field-msg { font-size:11px; font-weight:600; margin-top:3px; display:none; }
-
   .cat-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
   .ci { border:1.5px solid var(--bd); border-radius:8px; overflow:hidden; }
   .cl { background:var(--gd); padding:7px 12px; display:flex; align-items:center; gap:7px; }
@@ -49,15 +44,10 @@
   .cs.err { outline:1.5px solid #c0392b; }
   .actions { display:flex; gap:10px; flex-wrap:wrap; }
   .btn { font-family:'Space Grotesk',sans-serif; font-size:13px; font-weight:600; letter-spacing:.3px; padding:10px 22px; border-radius:6px; border:none; cursor:pointer; transition:background .15s; }
-  .btn-primary { background:var(--gd); color:#fff; }
-  .btn-primary:hover { background:var(--gm); }
-  .btn-secondary { background:var(--white); color:var(--gd); border:1.5px solid var(--gb); }
-  .btn-secondary:hover { background:var(--gl); }
-  .btn-outline { background:transparent; color:var(--tm); border:1.5px solid var(--bd); }
-  .btn-outline:hover { background:var(--off); }
+  .btn-primary { background:var(--gd); color:#fff; } .btn-primary:hover { background:var(--gm); }
+  .btn-secondary { background:var(--white); color:var(--gd); border:1.5px solid var(--gb); } .btn-secondary:hover { background:var(--gl); }
+  .btn-outline { background:transparent; color:var(--tm); border:1.5px solid var(--bd); } .btn-outline:hover { background:var(--off); }
   .btn:disabled { opacity:.6; cursor:not-allowed; }
-
-  /* MANAGER */
   .mgr-body { padding:20px 24px 50px; }
   .mgr-toolbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:12px; }
   .mgr-title { font-family:'Space Grotesk',sans-serif; font-size:17px; font-weight:700; color:var(--gd); }
@@ -79,11 +69,8 @@
   .b-rni { background:#f0a500; color:#fff; } .b-unsat { background:#c0392b; color:#fff; }
   .sc { font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:14px; color:var(--gd); text-align:center; }
   .empty { text-align:center; padding:50px 20px; color:var(--tm); font-size:13px; }
-
   .toast { position:fixed; bottom:22px; left:50%; transform:translateX(-50%); padding:11px 22px; border-radius:8px; font-size:13px; font-family:'Space Grotesk',sans-serif; font-weight:600; z-index:9999; opacity:0; transition:opacity .3s; pointer-events:none; white-space:nowrap; }
   .toast.show { opacity:1; } .toast.success { background:var(--gd); color:#fff; } .toast.error { background:#c0392b; color:#fff; }
-
-  /* PASSWORD MODAL */
   .overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:1000; align-items:center; justify-content:center; }
   .modal { background:#fff; border-radius:12px; padding:28px 24px; width:100%; max-width:360px; box-shadow:0 8px 32px rgba(0,0,0,.2); }
   .modal-head { display:flex; align-items:center; gap:10px; margin-bottom:5px; }
@@ -94,7 +81,6 @@
   .pwd-input { width:100%; font-family:'Inter',sans-serif; font-size:13px; padding:9px 12px; border:1.5px solid var(--bd); border-radius:6px; outline:none; color:var(--black); background:var(--off); }
   .pwd-err { display:none; font-size:11.5px; color:#c0392b; margin-top:5px; font-weight:500; }
   .modal-btns { display:flex; gap:10px; margin-top:18px; }
-
   @media print {
     .tab-nav,.actions,.mgr-toolbar .btn { display:none !important; }
     .tab-panel { display:block !important; } #panel-form { display:none !important; }
@@ -119,10 +105,9 @@
   <button class="tab-btn" id="tab-rpt" onclick="promptManager('rpt')">📈 Reports 🔒</button>
 </div>
 
-<!-- ═══ FORM ═══ -->
+<!-- FORM -->
 <div id="panel-form" class="tab-panel active">
 <div class="form-body">
-
   <div class="card">
     <div class="card-hdr"><h2>Session Details</h2></div>
     <div class="card-body">
@@ -135,17 +120,14 @@
             <option>Kathy Leonar</option><option>Rose Ann Parafina</option><option>Romina Marie Dumlao</option>
             <option>Mark Pesico</option><option>John Paul Racines</option><option>Sunshine Faith Broñosa</option>
             <option>Bobzer San Juan</option><option>Moses Cawil</option>
-          </select>
-        </div>
+          </select></div>
         <div class="fld"><label>Session Date</label><input type="date" id="f-sdate"></div>
         <div class="fld s2"><label>Organization &amp; Exam Name</label><input type="text" id="f-org" placeholder="Enter organization and exam name"></div>
         <div class="fld s2"><label>Session URL</label><input type="url" id="f-url" placeholder="https://..."></div>
         <div class="fld"><label>Date Evaluated</label><input type="date" id="f-deval"></div>
         <div class="fld">
           <label>Reservation Code</label>
-          <input type="text" id="f-rcode" placeholder="e.g. ABC-12345"
-            oninput="validateResCodeFormat(this)"
-            onblur="checkReservationCode(this)">
+          <input type="text" id="f-rcode" placeholder="e.g. ABC-12345" oninput="validateResCodeFormat(this)" onblur="checkReservationCode(this)">
           <div class="field-msg" id="rcode-msg"></div>
         </div>
         <div class="fld"><label>Evaluated By</label>
@@ -153,12 +135,10 @@
             <option value="">— Select Evaluator —</option>
             <option>Mary Jane Austria</option><option>Gian Bennith Garcia</option>
             <option>Dianne Candano</option><option>Ralph Angelo Soriano</option><option>Ralph Maullion</option>
-          </select>
-        </div>
+          </select></div>
       </div>
     </div>
   </div>
-
   <div class="card">
     <div class="card-hdr"><h2>Evaluation Categories</h2></div>
     <div class="card-body">
@@ -178,7 +158,6 @@
       </div>
     </div>
   </div>
-
   <div class="card">
     <div class="card-hdr"><h2>Comments</h2></div>
     <div class="card-body">
@@ -186,7 +165,6 @@
         <textarea id="f-comments" placeholder="Enter any additional comments or observations…"></textarea></div>
     </div>
   </div>
-
   <div class="actions">
     <button class="btn btn-primary" id="submit-btn" onclick="addRecord()">Add Record</button>
     <button class="btn btn-outline" onclick="resetForm()">Clear Form</button>
@@ -194,7 +172,7 @@
 </div>
 </div>
 
-<!-- ═══ MANAGER ═══ -->
+<!-- MANAGER -->
 <div id="panel-mgr" class="tab-panel">
 <div class="mgr-body">
   <div class="mgr-toolbar">
@@ -209,54 +187,42 @@
 </div>
 </div>
 
-<!-- ═══ REPORT ═══ -->
+<!-- REPORTS -->
 <div id="panel-rpt" class="tab-panel">
 <div class="mgr-body">
   <div class="mgr-toolbar">
-    <div>
-      <div class="mgr-title">Proctor Average Grade Report</div>
-      <div class="mgr-meta" id="rpt-meta">Select a week to generate the report.</div>
-    </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+    <div><div class="mgr-title">Proctor Average Grade Report</div><div class="mgr-meta" id="rpt-meta">Select a week to generate the report.</div></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
       <button class="btn btn-secondary" onclick="exportReportExcel()">⬇ Export to Excel</button>
       <button class="btn btn-outline" onclick="window.print()">🖨 Print</button>
     </div>
   </div>
-
-  <!-- WEEK FILTER -->
-  <div style="background:var(--white);border:1px solid var(--bd);border-radius:10px;padding:16px 20px;margin-bottom:16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
-    <div style="display:flex;flex-direction:column;gap:4px;">
-      <label style="font-size:10px;font-weight:600;letter-spacing:.4px;text-transform:uppercase;color:var(--tm);">Select Week</label>
-      <input type="week" id="rpt-week" onchange="generateReport()"
-        style="font-family:'Inter',sans-serif;font-size:13px;padding:8px 12px;border:1.5px solid var(--bd);border-radius:6px;outline:none;color:var(--black);background:var(--off);cursor:pointer;">
+  <div style="background:var(--white);border:1px solid var(--bd);border-radius:10px;padding:16px 20px;margin-bottom:16px;display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;">
+    <div class="fld" style="min-width:180px;">
+      <label>Select Week</label>
+      <input type="week" id="rpt-week" onchange="generateReport()" style="font-family:'Inter',sans-serif;font-size:13px;padding:8px 12px;border:1.5px solid var(--bd);border-radius:6px;outline:none;color:var(--black);background:var(--off);cursor:pointer;">
     </div>
-    <div style="display:flex;flex-direction:column;gap:4px;">
-      <label style="font-size:10px;font-weight:600;letter-spacing:.4px;text-transform:uppercase;color:var(--tm);">Or Filter by Date Range</label>
-      <div style="display:flex;align-items:center;gap:8px;">
-        <input type="date" id="rpt-from" onchange="generateReport()"
-          style="font-family:'Inter',sans-serif;font-size:13px;padding:8px 12px;border:1.5px solid var(--bd);border-radius:6px;outline:none;color:var(--black);background:var(--off);">
-        <span style="color:var(--tm);font-size:13px;">to</span>
-        <input type="date" id="rpt-to" onchange="generateReport()"
-          style="font-family:'Inter',sans-serif;font-size:13px;padding:8px 12px;border:1.5px solid var(--bd);border-radius:6px;outline:none;color:var(--black);background:var(--off);">
-      </div>
+    <div class="fld" style="min-width:140px;">
+      <label>Date From</label>
+      <input type="date" id="rpt-from" onchange="generateReport()" style="font-family:'Inter',sans-serif;font-size:13px;padding:8px 12px;border:1.5px solid var(--bd);border-radius:6px;outline:none;color:var(--black);background:var(--off);">
     </div>
-    <div style="display:flex;flex-direction:column;gap:4px;">
-      <label style="visibility:hidden;font-size:10px;">x</label>
-      <button class="btn btn-outline" style="padding:8px 14px;font-size:12px;" onclick="clearReportFilters()">✕ Clear</button>
+    <div class="fld" style="min-width:140px;">
+      <label>Date To</label>
+      <input type="date" id="rpt-to" onchange="generateReport()" style="font-family:'Inter',sans-serif;font-size:13px;padding:8px 12px;border:1.5px solid var(--bd);border-radius:6px;outline:none;color:var(--black);background:var(--off);">
     </div>
+    <button class="btn btn-outline" style="padding:8px 14px;font-size:12px;margin-bottom:1px;" onclick="clearReportFilters()">✕ Clear</button>
   </div>
-
-  <!-- SCORING RULE NOTE -->
   <div style="background:var(--gl);border:1px solid var(--bd);border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:12px;color:var(--gd);line-height:1.7;">
     <strong>Scoring Rule:</strong> Each proctor requires <strong>5 reviewed sessions</strong> per selected period.
     The <strong>highest</strong> and <strong>lowest</strong> scores are excluded, and the
     <strong>average of the remaining 3</strong> scores is the Proctor's Average Grade.
     Proctors with fewer than 5 sessions are marked as <strong>Incomplete</strong>.
   </div>
-
   <div class="table-wrap"><div id="rpt-tbl"><div class="empty">Select a week or date range above to generate the report.</div></div></div>
 </div>
 </div>
+
+<!-- PASSWORD MODAL -->
 <div class="overlay" id="pwd-overlay">
   <div class="modal">
     <div class="modal-head">
@@ -280,34 +246,47 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
-  var CAT_IDS = ['c1','c2','c3','c4','c5','c6'];
-  var CAT_LABELS = [
-    'Basic Troubleshooting (If applicable)', 'Identity Verification', 'Environment Check',
-    'System Check (Non-SEB or SEB-disabled)', 'Incident Logging', 'Candidate Inquiry Management'
-  ];
-  var MGR_PWD = 'QAManager2024';
-  var _rows = [];
+  var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxiwmpjy2zMgBolMD620y6DqaaQ_fS92lhNIgYgiBffx7uh8_aLH-6eK0LFJNaR6LlJ6Q/exec';
+  var CAT_IDS    = ['c1','c2','c3','c4','c5','c6'];
+  var CAT_LABELS = ['Basic Troubleshooting (If applicable)','Identity Verification','Environment Check','System Check (Non-SEB or SEB-disabled)','Incident Logging','Candidate Inquiry Management'];
+  var MGR_PWD    = 'QAManager2024';
+  var _rows      = [];
+  var _reportData = [];
+  var _targetTab  = 'mgr';
+
+  // ── JSONP ──────────────────────────────────────────────────────────
+  function jsonp(url) {
+    return new Promise(function(resolve, reject) {
+      var cb = 'cb_' + Date.now() + '_' + Math.floor(Math.random()*10000);
+      var s  = document.createElement('script');
+      var t  = setTimeout(function(){ cleanup(); reject(new Error('Timeout')); }, 15000);
+      function cleanup(){ delete window[cb]; if(s.parentNode) s.parentNode.removeChild(s); clearTimeout(t); }
+      window[cb] = function(data){ cleanup(); resolve(data); };
+      s.onerror  = function(){ cleanup(); reject(new Error('Script load error')); };
+      s.src = url + (url.indexOf('?') === -1 ? '?' : '&') + 'callback=' + cb;
+      document.body.appendChild(s);
+    });
+  }
 
   // ── Toast ──────────────────────────────────────────────────────────
   function toast(msg, type, ms) {
-    type = type || 'success'; ms = ms || 3500;
+    type = type||'success'; ms = ms||3500;
     var t = document.getElementById('toast');
     t.textContent = msg; t.className = 'toast ' + type + ' show';
     setTimeout(function(){ t.classList.remove('show'); }, ms);
   }
 
   // ── Tabs ───────────────────────────────────────────────────────────
-  var _targetTab = 'mgr';
   function switchTab(t) {
     ['form','mgr','rpt'].forEach(function(id){
-      document.getElementById('panel-' + id).classList.toggle('active', id === t);
-      document.getElementById('tab-' + id).classList.toggle('active', id === t);
+      document.getElementById('panel-'+id).classList.toggle('active', id===t);
+      document.getElementById('tab-'+id).classList.toggle('active', id===t);
     });
     if (t === 'mgr') loadMgr();
-    if (t === 'rpt') { if (!_rows.length) loadRowsForReport(); }
+    if (t === 'rpt' && !_rows.length) loadRowsForReport();
   }
 
-  // ── Password modal ─────────────────────────────────────────────────
+  // ── Password ───────────────────────────────────────────────────────
   function promptManager(target) {
     _targetTab = target || 'mgr';
     document.getElementById('pwd-overlay').style.display = 'flex';
@@ -325,64 +304,52 @@
     }
   }
   function closePwd() { document.getElementById('pwd-overlay').style.display = 'none'; }
-  document.getElementById('pwd-overlay').addEventListener('click', function(e){ if(e.target === this) closePwd(); });
+  document.getElementById('pwd-overlay').addEventListener('click', function(e){ if(e.target===this) closePwd(); });
 
   // ── Helpers ────────────────────────────────────────────────────────
   function calcScore() {
-    return CAT_IDS.reduce(function(sum, id){
+    return CAT_IDS.reduce(function(sum,id){
       var el = document.getElementById(id);
-      if (!el || !el.value) return sum;
+      if (!el||!el.value) return sum;
       var v = el.value;
-      var m = { 'Pass': +el.dataset.pass, 'Fail': +el.dataset.fail, 'Needs Improvement': +el.dataset.ni, 'N/A': +el.dataset.na };
-      return sum + (m[v] || 0);
-    }, 0);
+      var m = {'Pass':+el.dataset.pass,'Fail':+el.dataset.fail,'Needs Improvement':+el.dataset.ni,'N/A':+el.dataset.na};
+      return sum + (m[v]||0);
+    },0);
   }
-  function getRating(s) { return s>=90?'Excellent':s>=75?'Good':s>=50?'Needs Improvement':s>0?'Unsatisfactory':''; }
-  function gv(id) { var el = document.getElementById(id); return el ? el.value.trim() : ''; }
+  function getRating(s){ return s>=90?'Excellent':s>=75?'Good':s>=50?'Needs Improvement':s>0?'Unsatisfactory':''; }
+  function gv(id){ var el=document.getElementById(id); return el?el.value.trim():''; }
 
-  // ── Reservation Code validation ────────────────────────────────────
+  // ── Reservation Code ───────────────────────────────────────────────
   function setRcodeMsg(msg, color) {
     var el = document.getElementById('rcode-msg');
-    el.textContent = msg;
-    el.style.color = color;
+    el.textContent = msg; el.style.color = color;
     el.style.display = msg ? 'block' : 'none';
   }
-
   function validateResCodeFormat(input) {
     var code = input.value.trim();
-    if (!code) { setRcodeMsg('', ''); input.classList.remove('err'); return; }
+    if (!code) { setRcodeMsg('',''); input.classList.remove('err'); return; }
     if (code.indexOf('-') === -1) {
       input.classList.add('err');
-      setRcodeMsg('✕ Reservation Code must contain a dash ( - ) character.', '#c0392b');
-    } else {
-      input.classList.remove('err');
-      setRcodeMsg('', '');
-    }
+      setRcodeMsg('✕ Reservation Code must contain a dash ( - ) character.','#c0392b');
+    } else { input.classList.remove('err'); setRcodeMsg('',''); }
   }
-
   function checkReservationCode(input) {
     var code = input.value.trim();
-    if (!code) { setRcodeMsg('', ''); return; }
+    if (!code) { setRcodeMsg('',''); return; }
     if (code.indexOf('-') === -1) {
       input.classList.add('err');
-      setRcodeMsg('✕ Reservation Code must contain a dash ( - ) character.', '#c0392b');
+      setRcodeMsg('✕ Reservation Code must contain a dash ( - ) character.','#c0392b');
       return;
     }
-    setRcodeMsg('Checking reservation code…', '#556b62');
-    google.script.run
-      .withSuccessHandler(function(result){
+    setRcodeMsg('Checking reservation code…','#556b62');
+    jsonp(SCRIPT_URL + '?action=checkDuplicate&code=' + encodeURIComponent(code))
+      .then(function(result){
         if (result.status === 'duplicate') {
           input.classList.add('err');
-          setRcodeMsg('✕ Reservation Code "' + code + '" has already been submitted.', '#c0392b');
-        } else {
-          input.classList.remove('err');
-          setRcodeMsg('✓ Reservation Code is available.', '#1a3d2b');
-        }
+          setRcodeMsg('✕ Reservation Code "'+code+'" has already been submitted.','#c0392b');
+        } else { input.classList.remove('err'); setRcodeMsg('✓ Reservation Code is available.','#1a3d2b'); }
       })
-      .withFailureHandler(function(){
-        setRcodeMsg('Could not verify. Code will be checked on submission.', '#556b62');
-      })
-      .checkDuplicate(code);
+      .catch(function(){ setRcodeMsg('Could not verify. Code will be checked on submission.','#556b62'); });
   }
 
   // ── Add Record ─────────────────────────────────────────────────────
@@ -391,344 +358,262 @@
     var ok = true;
     req.forEach(function(id){
       var el = document.getElementById(id);
-      if (!el || !el.value.trim()) { if(el) el.classList.add('err'); ok = false; }
+      if (!el||!el.value.trim()){ if(el) el.classList.add('err'); ok=false; }
       else el.classList.remove('err');
     });
     CAT_IDS.forEach(function(id){
       var el = document.getElementById(id);
-      if (!el || !el.value) { if(el) el.classList.add('err'); ok = false; }
+      if (!el||!el.value){ if(el) el.classList.add('err'); ok=false; }
       else el.classList.remove('err');
     });
-    if (!ok) { toast('Please fill in all required fields.', 'error'); return; }
-
-    // Dash validation
+    if (!ok){ toast('Please fill in all required fields.','error'); return; }
     var rcode = gv('f-rcode');
     if (rcode.indexOf('-') === -1) {
       document.getElementById('f-rcode').classList.add('err');
-      setRcodeMsg('✕ Reservation Code must contain a dash ( - ) character.', '#c0392b');
-      toast('Reservation Code must contain a dash ( - ) character.', 'error', 4000);
-      return;
+      setRcodeMsg('✕ Reservation Code must contain a dash ( - ) character.','#c0392b');
+      toast('Reservation Code must contain a dash ( - ).','error',4000); return;
     }
-
     var btn = document.getElementById('submit-btn');
     btn.textContent = 'Submitting…'; btn.disabled = true;
-
     var score = calcScore();
-    var payload = {
-      submittedAt:     new Date().toLocaleString('en-PH', {timeZone:'Asia/Manila'}),
-      proctor:         gv('f-proctor'),
-      sessionDate:     gv('f-sdate'),
-      orgExam:         gv('f-org'),
-      sessionUrl:      gv('f-url'),
-      dateEvaluated:   gv('f-deval'),
-      reservationCode: rcode,
-      evaluatedBy:     gv('f-evalby'),
-      cat1: gv('c1'), cat2: gv('c2'), cat3: gv('c3'),
-      cat4: gv('c4'), cat5: gv('c5'), cat6: gv('c6'),
-      comments:        gv('f-comments'),
-      totalScore:      score,
-      rating:          getRating(score)
-    };
-
-    google.script.run
-      .withSuccessHandler(function(result){
-        btn.textContent = 'Add Record'; btn.disabled = false;
-        if (result.status === 'duplicate') {
+    var params = new URLSearchParams({
+      action:'add',
+      submittedAt: new Date().toLocaleString('en-PH',{timeZone:'Asia/Manila'}),
+      proctor:gv('f-proctor'), sessionDate:gv('f-sdate'),
+      orgExam:gv('f-org'), sessionUrl:gv('f-url'),
+      dateEvaluated:gv('f-deval'), reservationCode:rcode,
+      evaluatedBy:gv('f-evalby'),
+      cat1:gv('c1'),cat2:gv('c2'),cat3:gv('c3'),cat4:gv('c4'),cat5:gv('c5'),cat6:gv('c6'),
+      comments:gv('f-comments'), totalScore:score, rating:getRating(score)
+    });
+    jsonp(SCRIPT_URL + '?' + params.toString())
+      .then(function(result){
+        if (result.status==='duplicate'){
           document.getElementById('f-rcode').classList.add('err');
-          setRcodeMsg('✕ Reservation Code "' + rcode + '" has already been submitted.', '#c0392b');
-          toast('Reservation Code already submitted.', 'error', 5000);
-        } else if (result.status === 'ok') {
-          toast('✓ Record submitted — Score: ' + score + '/100 (' + getRating(score) + ')', 'success');
+          setRcodeMsg('✕ Reservation Code "'+rcode+'" has already been submitted.','#c0392b');
+          toast('Reservation Code already submitted.','error',5000);
+        } else if (result.status==='ok'){
+          toast('✓ Record submitted — Score: '+score+'/100 ('+getRating(score)+')','success');
           resetForm();
         } else {
-          toast('Error: ' + (result.message || 'Please try again.'), 'error', 5000);
+          toast('Error: '+(result.message||'Please try again.'),'error',5000);
         }
       })
-      .withFailureHandler(function(e){
-        btn.textContent = 'Add Record'; btn.disabled = false;
-        toast('Submission failed: ' + (e.message || e), 'error', 5000);
-      })
-      .addRecord(payload);
+      .catch(function(e){ toast('Connection error. Please try again.','error',5000); console.error(e); })
+      .finally(function(){ btn.textContent='Add Record'; btn.disabled=false; });
   }
 
-  // ── Reset form ─────────────────────────────────────────────────────
+  // ── Reset ──────────────────────────────────────────────────────────
   function resetForm() {
     ['f-proctor','f-sdate','f-org','f-url','f-deval','f-rcode','f-evalby','f-comments']
-      .forEach(function(id){ var el = document.getElementById(id); if(el){ el.value = ''; el.classList.remove('err'); } });
-    CAT_IDS.forEach(function(id){ var el = document.getElementById(id); if(el){ el.value = ''; el.classList.remove('err'); } });
-    setRcodeMsg('', '');
+      .forEach(function(id){ var el=document.getElementById(id); if(el){el.value='';el.classList.remove('err');} });
+    CAT_IDS.forEach(function(id){ var el=document.getElementById(id); if(el){el.value='';el.classList.remove('err');} });
+    setRcodeMsg('','');
   }
 
-  // ── Load Manager View ──────────────────────────────────────────────
+  // ── Load Manager ───────────────────────────────────────────────────
   function loadMgr() {
-    var tbl = document.getElementById('tbl');
-    var meta = document.getElementById('mgr-meta');
-    tbl.innerHTML = '<div class="empty">Loading records…</div>';
-    meta.textContent = 'Loading…';
-    google.script.run
-      .withSuccessHandler(function(result){
-        _rows = (result.status === 'ok' && result.data) ? result.data : [];
-        meta.textContent = _rows.length + ' record' + (_rows.length !== 1 ? 's' : '') + ' total';
+    var tbl=document.getElementById('tbl'), meta=document.getElementById('mgr-meta');
+    tbl.innerHTML='<div class="empty">Loading records…</div>'; meta.textContent='Loading…';
+    jsonp(SCRIPT_URL + '?action=get')
+      .then(function(result){
+        _rows = (result.status==='ok'&&result.data) ? result.data : [];
+        meta.textContent = _rows.length+' record'+(_rows.length!==1?'s':'')+' total';
         renderTable(_rows);
-        // Refresh report if it has filters set
-        if (document.getElementById('rpt-week').value || document.getElementById('rpt-from').value) {
-          generateReport();
-        }
+        if (document.getElementById('rpt-week').value || document.getElementById('rpt-from').value) generateReport();
       })
-      .withFailureHandler(function(e){
-        tbl.innerHTML = '<div class="empty">Error loading records: ' + (e.message || e) + '</div>';
-        meta.textContent = 'Error';
-      })
-      .getRecords();
+      .catch(function(e){
+        tbl.innerHTML='<div class="empty">Error loading records. Please try again.</div>';
+        meta.textContent='Error'; console.error(e);
+      });
   }
 
   // ── Render table ───────────────────────────────────────────────────
   function renderTable(rows) {
     var tbl = document.getElementById('tbl');
-    if (!rows.length) { tbl.innerHTML = '<div class="empty">No records submitted yet.</div>'; return; }
-    var bc = function(v){ return v==='Pass'?'b-pass':v==='Fail'?'b-fail':v==='Needs Improvement'?'b-ni':'b-na'; };
-    var rc = function(r){ return r==='Excellent'?'b-exc':r==='Good'?'b-good':r==='Needs Improvement'?'b-rni':'b-unsat'; };
-    var hs = ['#','Submitted At','Proctor','Session Date','Org & Exam','Session URL','Date Evaluated','Res. Code','Evaluated By'].concat(CAT_LABELS).concat(['Comments','Score','Rating']);
-    var h = '<table><thead><tr>' + hs.map(function(x){ return '<th>' + x + '</th>'; }).join('') + '</tr></thead><tbody>';
-    rows.forEach(function(r, i){
-      h += '<tr>'
-        + '<td>' + (i+1) + '</td>'
-        + '<td style="white-space:nowrap">' + (r[0]||'') + '</td>'
-        + '<td><b>' + (r[1]||'') + '</b></td>'
-        + '<td style="white-space:nowrap">' + (r[2]||'') + '</td>'
-        + '<td>' + (r[3]||'') + '</td>'
-        + '<td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+(r[4]||'')+'">' + (r[4]||'') + '</td>'
-        + '<td style="white-space:nowrap">' + (r[5]||'') + '</td>'
-        + '<td>' + (r[6]||'') + '</td>'
-        + '<td>' + (r[7]||'') + '</td>'
-        + r.slice(8,14).map(function(v){ return '<td><span class="bp ' + bc(v) + '">' + (v||'—') + '</span></td>'; }).join('')
-        + '<td style="max-width:150px;font-size:11px">' + (r[14]||'') + '</td>'
-        + '<td class="sc">' + (r[15]||0) + '</td>'
-        + '<td><span class="bp ' + rc(r[16]) + '">' + (r[16]||'—') + '</span></td>'
-        + '</tr>';
+    if (!rows.length){ tbl.innerHTML='<div class="empty">No records submitted yet.</div>'; return; }
+    var bc=function(v){ return v==='Pass'?'b-pass':v==='Fail'?'b-fail':v==='Needs Improvement'?'b-ni':'b-na'; };
+    var rc=function(r){ return r==='Excellent'?'b-exc':r==='Good'?'b-good':r==='Needs Improvement'?'b-rni':'b-unsat'; };
+    var hs=['#','Submitted At','Proctor','Session Date','Org & Exam','Session URL','Date Evaluated','Res. Code','Evaluated By'].concat(CAT_LABELS).concat(['Comments','Score','Rating']);
+    var h='<table><thead><tr>'+hs.map(function(x){ return '<th>'+x+'</th>'; }).join('')+'</tr></thead><tbody>';
+    rows.forEach(function(r,i){
+      h+='<tr><td>'+(i+1)+'</td><td style="white-space:nowrap">'+(r[0]||'')+'</td>'
+        +'<td><b>'+(r[1]||'')+'</b></td><td style="white-space:nowrap">'+(r[2]||'')+'</td>'
+        +'<td>'+(r[3]||'')+'</td>'
+        +'<td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+(r[4]||'')+'">'+(r[4]||'')+'</td>'
+        +'<td style="white-space:nowrap">'+(r[5]||'')+'</td><td>'+(r[6]||'')+'</td><td>'+(r[7]||'')+'</td>'
+        +r.slice(8,14).map(function(v){ return '<td><span class="bp '+bc(v)+'">'+(v||'—')+'</span></td>'; }).join('')
+        +'<td style="max-width:150px;font-size:11px">'+(r[14]||'')+'</td>'
+        +'<td class="sc">'+(r[15]||0)+'</td>'
+        +'<td><span class="bp '+rc(r[16])+'">'+(r[16]||'—')+'</span></td></tr>';
     });
-    h += '</tbody></table>';
-    tbl.innerHTML = h;
+    h+='</tbody></table>';
+    tbl.innerHTML=h;
   }
 
-  // ── Load rows for report (shared with manager) ─────────────────────
+  // ── Report ─────────────────────────────────────────────────────────
   function loadRowsForReport() {
-    google.script.run
-      .withSuccessHandler(function(result){
-        _rows = (result.status === 'ok' && result.data) ? result.data : [];
+    jsonp(SCRIPT_URL + '?action=get')
+      .then(function(result){
+        _rows = (result.status==='ok'&&result.data) ? result.data : [];
         generateReport();
-      })
-      .withFailureHandler(function(){ })
-      .getRecords();
+      }).catch(function(){});
   }
 
-  // ── Parse date string (MM/dd/yyyy or yyyy-MM-dd) ───────────────────
   function parseDate(str) {
     if (!str) return null;
     var d;
     if (String(str).indexOf('/') !== -1) {
       var p = String(str).split('/');
       d = new Date(parseInt(p[2]), parseInt(p[0])-1, parseInt(p[1]));
-    } else {
-      d = new Date(String(str));
-    }
+    } else { d = new Date(String(str)); }
     return isNaN(d.getTime()) ? null : d;
   }
 
-  // ── Get ISO week range (Mon–Sun) from "YYYY-Www" ───────────────────
   function getWeekRange(weekStr) {
     var parts = weekStr.split('-W');
-    var year = parseInt(parts[0]), week = parseInt(parts[1]);
-    var jan4 = new Date(year, 0, 4);
-    var mon = new Date(jan4);
-    mon.setDate(jan4.getDate() - ((jan4.getDay() + 6) % 7) + (week - 1) * 7);
+    var year=parseInt(parts[0]), week=parseInt(parts[1]);
+    var jan4=new Date(year,0,4);
+    var mon=new Date(jan4);
+    mon.setDate(jan4.getDate()-((jan4.getDay()+6)%7)+(week-1)*7);
     mon.setHours(0,0,0,0);
-    var sun = new Date(mon);
-    sun.setDate(mon.getDate() + 6);
-    sun.setHours(23,59,59,999);
-    return { start: mon, end: sun };
+    var sun=new Date(mon); sun.setDate(mon.getDate()+6); sun.setHours(23,59,59,999);
+    return { start:mon, end:sun };
   }
 
-  // ── Clear report filters ───────────────────────────────────────────
   function clearReportFilters() {
-    document.getElementById('rpt-week').value = '';
-    document.getElementById('rpt-from').value = '';
-    document.getElementById('rpt-to').value = '';
-    document.getElementById('rpt-tbl').innerHTML = '<div class="empty">Select a week or date range above to generate the report.</div>';
-    document.getElementById('rpt-meta').textContent = 'Select a week to generate the report.';
+    document.getElementById('rpt-week').value='';
+    document.getElementById('rpt-from').value='';
+    document.getElementById('rpt-to').value='';
+    document.getElementById('rpt-tbl').innerHTML='<div class="empty">Select a week or date range above to generate the report.</div>';
+    document.getElementById('rpt-meta').textContent='Select a week to generate the report.';
+    _reportData=[];
   }
 
-  // ── Generate report ────────────────────────────────────────────────
-  var _reportData = [];
   function generateReport() {
-    var rptTbl = document.getElementById('rpt-tbl');
-    var rptMeta = document.getElementById('rpt-meta');
-
-    var weekStr = document.getElementById('rpt-week').value;
-    var fromStr = document.getElementById('rpt-from').value;
-    var toStr   = document.getElementById('rpt-to').value;
-
-    if (!weekStr && !fromStr && !toStr) {
-      rptTbl.innerHTML = '<div class="empty">Select a week or date range above to generate the report.</div>';
-      rptMeta.textContent = 'Select a week to generate the report.';
-      return;
+    var rptTbl=document.getElementById('rpt-tbl'), rptMeta=document.getElementById('rpt-meta');
+    var weekStr=document.getElementById('rpt-week').value;
+    var fromStr=document.getElementById('rpt-from').value;
+    var toStr=document.getElementById('rpt-to').value;
+    if (!weekStr&&!fromStr&&!toStr) {
+      rptTbl.innerHTML='<div class="empty">Select a week or date range above to generate the report.</div>';
+      rptMeta.textContent='Select a week to generate the report.'; return;
     }
     if (!_rows.length) {
-      rptTbl.innerHTML = '<div class="empty">No records loaded yet. Please open Manager View first to load data.</div>';
-      return;
+      rptTbl.innerHTML='<div class="empty">No records loaded yet. Please open Manager View first to load data, then come back.</div>'; return;
     }
-
-    // Determine date range
     var start, end, periodLabel;
     if (weekStr) {
-      var wr = getWeekRange(weekStr);
-      start = wr.start; end = wr.end;
-      periodLabel = 'Week of ' + start.toLocaleDateString('en-PH',{month:'short',day:'numeric'})
-        + ' – ' + end.toLocaleDateString('en-PH',{month:'short',day:'numeric',year:'numeric'});
-      // Clear date range inputs
-      document.getElementById('rpt-from').value = '';
-      document.getElementById('rpt-to').value = '';
+      var wr=getWeekRange(weekStr); start=wr.start; end=wr.end;
+      periodLabel='Week of '+start.toLocaleDateString('en-PH',{month:'short',day:'numeric'})+' – '+end.toLocaleDateString('en-PH',{month:'short',day:'numeric',year:'numeric'});
+      document.getElementById('rpt-from').value=''; document.getElementById('rpt-to').value='';
     } else {
-      start = fromStr ? new Date(fromStr + 'T00:00:00') : null;
-      end   = toStr   ? new Date(toStr   + 'T23:59:59') : null;
-      periodLabel = (fromStr || '—') + ' to ' + (toStr || '—');
-      document.getElementById('rpt-week').value = '';
+      start=fromStr?new Date(fromStr+'T00:00:00'):null;
+      end=toStr?new Date(toStr+'T23:59:59'):null;
+      periodLabel=(fromStr||'—')+' to '+(toStr||'—');
+      document.getElementById('rpt-week').value='';
     }
-
-    // Group scores by proctor
-    var byProctor = {};
-    _rows.forEach(function(row) {
-      var sessionDate = parseDate(row[2]);
-      if (!sessionDate) return;
-      if (start && sessionDate < start) return;
-      if (end   && sessionDate > end)   return;
-      var proctor = String(row[1] || '').trim();
-      if (!proctor) return;
-      var score = parseFloat(row[15]);
-      if (isNaN(score)) return;
-      if (!byProctor[proctor]) byProctor[proctor] = [];
-      byProctor[proctor].push({ score: score, row: row });
+    var byProctor={};
+    _rows.forEach(function(row){
+      var d=parseDate(row[2]);
+      if (!d) return;
+      if (start&&d<start) return;
+      if (end&&d>end) return;
+      var p=String(row[1]||'').trim(); if(!p) return;
+      var s=parseFloat(row[15]); if(isNaN(s)) return;
+      if(!byProctor[p]) byProctor[p]=[];
+      byProctor[p].push(s);
     });
-
-    var proctors = Object.keys(byProctor).sort();
+    var proctors=Object.keys(byProctor).sort();
     if (!proctors.length) {
-      rptTbl.innerHTML = '<div class="empty">No sessions found for the selected period.</div>';
-      rptMeta.textContent = periodLabel + ' — 0 proctors found';
-      return;
+      rptTbl.innerHTML='<div class="empty">No sessions found for the selected period.</div>';
+      rptMeta.textContent=periodLabel+' — 0 proctors'; return;
     }
-
-    var ratingLabel = function(s){ return s>=90?'Excellent':s>=75?'Good':s>=50?'Needs Improvement':s>0?'Unsatisfactory':'—'; };
-    var ratingBadge = function(s){ return s>=90?'b-exc':s>=75?'b-good':s>=50?'b-rni':'b-unsat'; };
-
-    _reportData = [];
-    var html = '<table><thead><tr>'
-      + '<th>#</th><th>Proctor</th><th>Sessions</th>'
-      + '<th>All Scores</th><th>Excluded High</th><th>Excluded Low</th>'
-      + '<th>Used Scores (3)</th><th>Average Grade</th><th>Rating</th><th>Status</th>'
-      + '</tr></thead><tbody>';
-
-    proctors.forEach(function(proctor, i) {
-      var entries = byProctor[proctor];
-      var scores = entries.map(function(e){ return e.score; }).sort(function(a,b){ return a-b; });
-      var count = scores.length;
-      var row;
-
-      if (count < 5) {
-        row = { proctor:proctor, count:count, scores:scores.join(', '), high:'—', low:'—', used:'—', avg:'—', rating:'—', status:'Incomplete' };
-        html += '<tr style="background:#fffbeb;">'
-          + '<td>' + (i+1) + '</td>'
-          + '<td><strong>' + proctor + '</strong></td>'
-          + '<td style="text-align:center">' + count + '</td>'
-          + '<td>' + scores.join(', ') + '</td>'
-          + '<td colspan="4" style="color:#856404;font-style:italic;">⚠ Needs ' + (5-count) + ' more session' + (5-count!==1?'s':'') + ' to compute</td>'
-          + '<td><span class="bp b-ni">Incomplete</span></td>'
-          + '</tr>';
+    var rl=function(s){ return s>=90?'Excellent':s>=75?'Good':s>=50?'Needs Improvement':s>0?'Unsatisfactory':'—'; };
+    var rb=function(s){ return s>=90?'b-exc':s>=75?'b-good':s>=50?'b-rni':'b-unsat'; };
+    _reportData=[];
+    var html='<div style="font-size:12px;color:var(--tm);margin-bottom:12px;font-weight:600;">📅 '+periodLabel+'</div>';
+    html+='<table><thead><tr><th>#</th><th>Proctor</th><th>Sessions</th><th>All Scores</th><th>Excluded High</th><th>Excluded Low</th><th>Used Scores (3)</th><th>Average Grade</th><th>Rating</th><th>Status</th></tr></thead><tbody>';
+    proctors.forEach(function(proctor,i){
+      var scores=byProctor[proctor].slice().sort(function(a,b){return a-b;}), count=scores.length, row;
+      if (count<5) {
+        row={proctor:proctor,count:count,scores:scores.join(', '),high:'—',low:'—',used:'—',avg:'—',rating:'—',status:'Incomplete'};
+        html+='<tr style="background:#fffbeb;"><td>'+(i+1)+'</td><td><strong>'+proctor+'</strong></td><td style="text-align:center">'+count+'</td><td>'+scores.join(', ')+'</td>'
+          +'<td colspan="4" style="color:#856404;font-style:italic;">⚠ Needs '+(5-count)+' more session'+(5-count!==1?'s':'')+' to compute</td>'
+          +'<td><span class="bp b-ni">Incomplete</span></td></tr>';
       } else {
-        var low  = scores[0];
-        var high = scores[scores.length-1];
-        var mid  = scores.slice(1, scores.length-1);
-        var used = mid.length > 3
-          ? mid.slice(Math.floor((mid.length-3)/2), Math.floor((mid.length-3)/2)+3)
-          : mid;
-        var avg = used.reduce(function(s,v){ return s+v; },0) / used.length;
-        avg = Math.round(avg * 100) / 100;
-        row = { proctor:proctor, count:count, scores:scores.join(', '), high:high, low:low, used:used.join(', '), avg:avg, rating:ratingLabel(avg), status:'Complete' };
-        html += '<tr>'
-          + '<td>' + (i+1) + '</td>'
-          + '<td><strong>' + proctor + '</strong></td>'
-          + '<td style="text-align:center">' + count + '</td>'
-          + '<td>' + scores.join(', ') + '</td>'
-          + '<td><span style="color:#c0392b;font-weight:600">' + high + '</span></td>'
-          + '<td><span style="color:#856404;font-weight:600">' + low + '</span></td>'
-          + '<td><span style="color:#1a3d2b;font-weight:600">' + used.join(', ') + '</span></td>'
-          + '<td style="font-family:\'Space Grotesk\',sans-serif;font-weight:700;font-size:15px;color:var(--gd)">' + avg.toFixed(2) + '</td>'
-          + '<td><span class="bp ' + ratingBadge(avg) + '">' + ratingLabel(avg) + '</span></td>'
-          + '<td><span class="bp b-pass">Complete</span></td>'
-          + '</tr>';
+        var low=scores[0], high=scores[scores.length-1];
+        var mid=scores.slice(1,scores.length-1);
+        var used=mid.length>3?mid.slice(Math.floor((mid.length-3)/2),Math.floor((mid.length-3)/2)+3):mid;
+        var avg=used.reduce(function(s,v){return s+v;},0)/used.length;
+        avg=Math.round(avg*100)/100;
+        row={proctor:proctor,count:count,scores:scores.join(', '),high:high,low:low,used:used.join(', '),avg:avg,rating:rl(avg),status:'Complete'};
+        html+='<tr><td>'+(i+1)+'</td><td><strong>'+proctor+'</strong></td><td style="text-align:center">'+count+'</td><td>'+scores.join(', ')+'</td>'
+          +'<td><span style="color:#c0392b;font-weight:600">'+high+'</span></td>'
+          +'<td><span style="color:#856404;font-weight:600">'+low+'</span></td>'
+          +'<td><span style="color:#1a3d2b;font-weight:600">'+used.join(', ')+'</span></td>'
+          +'<td style="font-family:\'Space Grotesk\',sans-serif;font-weight:700;font-size:15px;color:var(--gd)">'+avg.toFixed(2)+'</td>'
+          +'<td><span class="bp '+rb(avg)+'">'+rl(avg)+'</span></td>'
+          +'<td><span class="bp b-pass">Complete</span></td></tr>';
       }
       _reportData.push(row);
     });
-
-    html += '</tbody></table>';
-    rptTbl.innerHTML = '<div style="font-size:12px;color:var(--tm);margin-bottom:12px;font-weight:600;">📅 ' + periodLabel + '</div>' + html;
-    rptMeta.textContent = periodLabel + ' — ' + proctors.length + ' proctor' + (proctors.length!==1?'s':'');
-  }
-
-  // ── Export Report to Excel ─────────────────────────────────────────
-  function exportReportExcel() {
-    if (!_reportData.length) { toast('No report data to export. Generate a report first.', 'error'); return; }
-    var hdrs = ['#','Proctor','Sessions','All Scores','Excluded High','Excluded Low','Used Scores (3)','Average Grade','Rating','Status'];
-    var rows = _reportData.map(function(r, i){
-      return [i+1, r.proctor, r.count, r.scores, r.high, r.low, r.used,
-        typeof r.avg === 'number' ? r.avg.toFixed(2) : r.avg, r.rating, r.status];
-    });
-    var wb = XLSX.utils.book_new();
-    var ws = XLSX.utils.aoa_to_sheet([hdrs].concat(rows));
-    ws['!cols'] = hdrs.map(function(h){ return {wch: Math.max(h.length+4, 16)}; });
-    var range = XLSX.utils.decode_range(ws['!ref']);
-    for (var C = range.s.c; C <= range.e.c; C++) {
-      var a = XLSX.utils.encode_cell({r:0,c:C});
-      if (ws[a]) ws[a].s = {font:{bold:true,color:{rgb:'FFFFFF'}},fill:{fgColor:{rgb:'1A3D2B'}},alignment:{horizontal:'center',wrapText:true}};
-    }
-    // Highlight avg and status columns
-    var ai = hdrs.indexOf('Average Grade'), si = hdrs.indexOf('Status');
-    for (var R = 1; R <= rows.length; R++) {
-      var aa = XLSX.utils.encode_cell({r:R,c:ai});
-      if (ws[aa]) ws[aa].s = {font:{bold:true,color:{rgb:'1A3D2B'}},fill:{fgColor:{rgb:'E6F4EC'}},alignment:{horizontal:'center'}};
-      var sa = XLSX.utils.encode_cell({r:R,c:si});
-      var st = rows[R-1][si];
-      var sc = st==='Complete'?'E6F4EC':'FFF3CD';
-      var fc = st==='Complete'?'1A3D2B':'856404';
-      if (ws[sa]) ws[sa].s = {font:{bold:true,color:{rgb:fc}},fill:{fgColor:{rgb:sc}},alignment:{horizontal:'center'}};
-    }
-    XLSX.utils.book_append_sheet(wb, ws, 'Proctor Average Grades');
-    XLSX.writeFile(wb, 'proctor_average_grades_' + new Date().toISOString().slice(0,10) + '.xlsx');
+    html+='</tbody></table>';
+    rptTbl.innerHTML=html;
+    rptMeta.textContent=periodLabel+' — '+proctors.length+' proctor'+(proctors.length!==1?'s':'');
   }
 
   // ── Export Excel ───────────────────────────────────────────────────
   function exportExcel() {
-    if (!_rows.length) { toast('No records to export. Load Manager View first.', 'error'); return; }
-    var hdrs = ['#','Submitted At','Proctor','Session Date','Org & Exam Name','Session URL','Date Evaluated','Reservation Code','Evaluated By'].concat(CAT_LABELS).concat(['Comments','Total Score','Rating']);
-    var rows = _rows.map(function(r, i){ return [i+1].concat(r); });
-    var wb = XLSX.utils.book_new();
-    var ws = XLSX.utils.aoa_to_sheet([hdrs].concat(rows));
-    ws['!cols'] = hdrs.map(function(h){ return {wch: Math.max(h.length+4, 16)}; });
-    var range = XLSX.utils.decode_range(ws['!ref']);
-    for (var C = range.s.c; C <= range.e.c; C++) {
-      var a = XLSX.utils.encode_cell({r:0, c:C});
-      if (ws[a]) ws[a].s = {font:{bold:true,color:{rgb:'FFFFFF'}},fill:{fgColor:{rgb:'1A3D2B'}},alignment:{horizontal:'center',wrapText:true}};
+    if (!_rows.length){ toast('No records to export. Load Manager View first.','error'); return; }
+    var hdrs=['#','Submitted At','Proctor','Session Date','Org & Exam Name','Session URL','Date Evaluated','Reservation Code','Evaluated By'].concat(CAT_LABELS).concat(['Comments','Total Score','Rating']);
+    var rows=_rows.map(function(r,i){ return [i+1].concat(r); });
+    var wb=XLSX.utils.book_new();
+    var ws=XLSX.utils.aoa_to_sheet([hdrs].concat(rows));
+    ws['!cols']=hdrs.map(function(h){ return {wch:Math.max(h.length+4,16)}; });
+    var range=XLSX.utils.decode_range(ws['!ref']);
+    for (var C=range.s.c;C<=range.e.c;C++) {
+      var a=XLSX.utils.encode_cell({r:0,c:C});
+      if(ws[a]) ws[a].s={font:{bold:true,color:{rgb:'FFFFFF'}},fill:{fgColor:{rgb:'1A3D2B'}},alignment:{horizontal:'center',wrapText:true}};
     }
-    var si = hdrs.indexOf('Total Score'), ri = hdrs.indexOf('Rating');
-    for (var R = 1; R <= rows.length; R++) {
-      var sa = XLSX.utils.encode_cell({r:R, c:si});
-      if (ws[sa]) ws[sa].s = {font:{bold:true,color:{rgb:'1A3D2B'}},fill:{fgColor:{rgb:'E6F4EC'}},alignment:{horizontal:'center'}};
-      var ra = XLSX.utils.encode_cell({r:R, c:ri});
-      var rt = rows[R-1][ri];
-      var rcc = rt==='Excellent'?'1A3D2B':rt==='Good'?'2D6A45':rt==='Needs Improvement'?'F0A500':'C0392B';
-      if (ws[ra]) ws[ra].s = {font:{bold:true,color:{rgb:'FFFFFF'}},fill:{fgColor:{rgb:rcc}},alignment:{horizontal:'center'}};
+    var si=hdrs.indexOf('Total Score'),ri=hdrs.indexOf('Rating');
+    for (var R=1;R<=rows.length;R++) {
+      var sa=XLSX.utils.encode_cell({r:R,c:si});
+      if(ws[sa]) ws[sa].s={font:{bold:true,color:{rgb:'1A3D2B'}},fill:{fgColor:{rgb:'E6F4EC'}},alignment:{horizontal:'center'}};
+      var ra=XLSX.utils.encode_cell({r:R,c:ri});
+      var rt=rows[R-1][ri];
+      var rcc=rt==='Excellent'?'1A3D2B':rt==='Good'?'2D6A45':rt==='Needs Improvement'?'F0A500':'C0392B';
+      if(ws[ra]) ws[ra].s={font:{bold:true,color:{rgb:'FFFFFF'}},fill:{fgColor:{rgb:rcc}},alignment:{horizontal:'center'}};
     }
-    XLSX.utils.book_append_sheet(wb, ws, 'QA Records');
-    XLSX.writeFile(wb, 'qa_records_' + new Date().toISOString().slice(0,10) + '.xlsx');
+    XLSX.utils.book_append_sheet(wb,ws,'QA Records');
+    XLSX.writeFile(wb,'qa_records_'+new Date().toISOString().slice(0,10)+'.xlsx');
+  }
+
+  function exportReportExcel() {
+    if (!_reportData.length){ toast('No report data. Generate a report first.','error'); return; }
+    var hdrs=['#','Proctor','Sessions','All Scores','Excluded High','Excluded Low','Used Scores (3)','Average Grade','Rating','Status'];
+    var rows=_reportData.map(function(r,i){
+      return [i+1,r.proctor,r.count,r.scores,r.high,r.low,r.used,
+        typeof r.avg==='number'?r.avg.toFixed(2):r.avg,r.rating,r.status];
+    });
+    var wb=XLSX.utils.book_new();
+    var ws=XLSX.utils.aoa_to_sheet([hdrs].concat(rows));
+    ws['!cols']=hdrs.map(function(h){ return {wch:Math.max(h.length+4,16)}; });
+    var range=XLSX.utils.decode_range(ws['!ref']);
+    for (var C=range.s.c;C<=range.e.c;C++) {
+      var a=XLSX.utils.encode_cell({r:0,c:C});
+      if(ws[a]) ws[a].s={font:{bold:true,color:{rgb:'FFFFFF'}},fill:{fgColor:{rgb:'1A3D2B'}},alignment:{horizontal:'center',wrapText:true}};
+    }
+    var ai=hdrs.indexOf('Average Grade'),sti=hdrs.indexOf('Status');
+    for (var R=1;R<=rows.length;R++) {
+      var aa=XLSX.utils.encode_cell({r:R,c:ai});
+      if(ws[aa]) ws[aa].s={font:{bold:true,color:{rgb:'1A3D2B'}},fill:{fgColor:{rgb:'E6F4EC'}},alignment:{horizontal:'center'}};
+      var sta=XLSX.utils.encode_cell({r:R,c:sti});
+      var st=rows[R-1][sti];
+      if(ws[sta]) ws[sta].s={font:{bold:true,color:{rgb:st==='Complete'?'1A3D2B':'856404'}},fill:{fgColor:{rgb:st==='Complete'?'E6F4EC':'FFF3CD'}},alignment:{horizontal:'center'}};
+    }
+    XLSX.utils.book_append_sheet(wb,ws,'Proctor Average Grades');
+    XLSX.writeFile(wb,'proctor_avg_grades_'+new Date().toISOString().slice(0,10)+'.xlsx');
   }
 </script>
 </body>
