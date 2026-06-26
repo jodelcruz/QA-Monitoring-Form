@@ -532,23 +532,43 @@
     }
     var rl=function(s){ return s>=90?'Excellent':s>=75?'Good':s>=50?'Needs Improvement':s>0?'Unsatisfactory':'—'; };
     var rb=function(s){ return s>=90?'b-exc':s>=75?'b-good':s>=50?'b-rni':'b-unsat'; };
+
+    // Collect all unique evaluators across all proctors (sorted)
+    var evalSet={};
+    proctors.forEach(function(p){
+      byProctor[p].forEach(function(e){ evalSet[e.evaluator]=true; });
+    });
+    var allEvaluators=Object.keys(evalSet).sort();
+
     _reportData=[];
     var html='<div style="font-size:12px;color:var(--tm);margin-bottom:12px;font-weight:600;">📅 '+periodLabel+'</div>';
-    html+='<table><thead><tr><th>#</th><th>Proctor</th><th>Sessions</th><th>All Scores</th><th>Evaluators</th><th>Excluded High</th><th>Excluded Low</th><th>Used Scores (3)</th><th>Average Grade</th><th>Rating</th><th>Status</th></tr></thead><tbody>';
+
+    // Build header — one column per evaluator
+    html+='<table><thead><tr><th>#</th><th>Proctor</th><th>Sessions</th>';
+    allEvaluators.forEach(function(ev){ html+='<th>'+ev+'</th>'; });
+    html+='<th>Excluded High</th><th>Excluded Low</th><th>Used Scores (3)</th><th>Average Grade</th><th>Rating</th><th>Status</th></tr></thead><tbody>';
+
     proctors.forEach(function(proctor,i){
-      // Sort entries by score ascending
       var entries=byProctor[proctor].slice().sort(function(a,b){return a.score-b.score;});
       var count=entries.length;
-      var allScores=entries.map(function(e){return e.score;}).join('<br>');
-      var allEvals=entries.map(function(e){return e.evaluator;}).join('<br>');
-      var allScoresText=entries.map(function(e){return e.score;}).join(', ');
-      var allEvalsText=entries.map(function(e){return e.evaluator;}).join(', ');
+
+      // Map evaluator → score for this proctor
+      var evalMap={};
+      entries.forEach(function(e){ evalMap[e.evaluator]=e.score; });
+
+      // Build evaluator cells
+      var evalCells=allEvaluators.map(function(ev){
+        return '<td style="text-align:center;font-size:12px;font-weight:600;color:var(--gd)">'+(evalMap[ev]!==undefined?evalMap[ev]:'—')+'</td>';
+      }).join('');
+
+      var allScoresText=entries.map(function(e){return e.score+' ('+e.evaluator+')';}).join(', ');
+      var allEvalsText=allEvaluators.map(function(ev){return evalMap[ev]!==undefined?ev+': '+evalMap[ev]:'—';}).join(', ');
       var row;
+
       if (count<5) {
         row={proctor:proctor,count:count,scores:allScoresText,evaluators:allEvalsText,high:'—',low:'—',used:'—',avg:'—',rating:'—',status:'Incomplete'};
         html+='<tr style="background:#fffbeb;"><td>'+(i+1)+'</td><td><strong>'+proctor+'</strong></td><td style="text-align:center">'+count+'</td>'
-          +'<td style="font-size:11px;line-height:1.8;text-align:center">'+allScores+'</td>'
-          +'<td style="font-size:11px;line-height:1.8">'+allEvals+'</td>'
+          +evalCells
           +'<td colspan="4" style="color:#856404;font-style:italic;">⚠ Needs '+(5-count)+' more session'+(5-count!==1?'s':'')+' to compute</td>'
           +'<td><span class="bp b-ni">Incomplete</span></td></tr>';
       } else {
@@ -557,19 +577,16 @@
         var usedEntries=midEntries.length>3?midEntries.slice(Math.floor((midEntries.length-3)/2),Math.floor((midEntries.length-3)/2)+3):midEntries;
         var avg=usedEntries.reduce(function(s,e){return s+e.score;},0)/usedEntries.length;
         avg=Math.round(avg*100)/100;
-        var usedScores=usedEntries.map(function(e){return e.score;}).join('<br>');
-        var usedEvals=usedEntries.map(function(e){return e.evaluator;}).join('<br>');
         var usedText=usedEntries.map(function(e){return e.score+' ('+e.evaluator+')';}).join(', ');
         row={proctor:proctor,count:count,scores:allScoresText,evaluators:allEvalsText,
           high:highEntry.score+' ('+highEntry.evaluator+')',
           low:lowEntry.score+' ('+lowEntry.evaluator+')',
           used:usedText,avg:avg,rating:rl(avg),status:'Complete'};
         html+='<tr><td>'+(i+1)+'</td><td><strong>'+proctor+'</strong></td><td style="text-align:center">'+count+'</td>'
-          +'<td style="font-size:11px;line-height:1.8;text-align:center">'+allScores+'</td>'
-          +'<td style="font-size:11px;line-height:1.8">'+allEvals+'</td>'
-          +'<td style="font-size:11px;text-align:center"><span style="color:#c0392b;font-weight:600">'+highEntry.score+'</span><br><span style="color:var(--tm);font-size:10px">'+highEntry.evaluator+'</span></td>'
-          +'<td style="font-size:11px;text-align:center"><span style="color:#856404;font-weight:600">'+lowEntry.score+'</span><br><span style="color:var(--tm);font-size:10px">'+lowEntry.evaluator+'</span></td>'
-          +'<td style="font-size:11px;line-height:1.8;text-align:center">'+usedScores+'<br><span style="color:var(--tm);font-size:10px">'+usedEvals+'</span></td>'
+          +evalCells
+          +'<td style="text-align:center"><span style="color:#c0392b;font-weight:600">'+highEntry.score+'</span><br><span style="color:var(--tm);font-size:10px">'+highEntry.evaluator+'</span></td>'
+          +'<td style="text-align:center"><span style="color:#856404;font-weight:600">'+lowEntry.score+'</span><br><span style="color:var(--tm);font-size:10px">'+lowEntry.evaluator+'</span></td>'
+          +'<td style="text-align:center;font-size:11px;color:#1a3d2b;font-weight:600">'+usedEntries.map(function(e){return e.score;}).join(', ')+'</td>'
           +'<td style="font-family:\'Space Grotesk\',sans-serif;font-weight:700;font-size:15px;color:var(--gd);text-align:center">'+avg.toFixed(2)+'</td>'
           +'<td><span class="bp '+rb(avg)+'">'+rl(avg)+'</span></td>'
           +'<td><span class="bp b-pass">Complete</span></td></tr>';
@@ -609,10 +626,27 @@
 
   function exportReportExcel() {
     if (!_reportData.length){ toast('No report data. Generate a report first.','error'); return; }
-    var hdrs=['#','Proctor','Sessions','All Scores','Evaluators','Excluded High','Excluded Low','Used Scores (3)','Average Grade','Rating','Status'];
+    // Build evaluator list from report data
+    var evalSet={};
+    _reportData.forEach(function(r){
+      if(r.evaluators) r.evaluators.split(', ').forEach(function(e){
+        var name=e.split(': ')[0]; if(name&&name!=='—') evalSet[name]=true;
+      });
+    });
+    var allEvals=Object.keys(evalSet).sort();
+    var hdrs=['#','Proctor','Sessions'].concat(allEvals).concat(['Excluded High','Excluded Low','Used Scores (3)','Average Grade','Rating','Status']);
     var rows=_reportData.map(function(r,i){
-      return [i+1,r.proctor,r.count,r.scores,r.evaluators,r.high,r.low,r.used,
-        typeof r.avg==='number'?r.avg.toFixed(2):r.avg,r.rating,r.status];
+      // Parse evaluator scores from stored text
+      var evalMap={};
+      if(r.scores){
+        r.scores.split(', ').forEach(function(s){
+          var m=s.match(/^([\d.]+)\s*\((.+)\)$/);
+          if(m) evalMap[m[2].trim()]=m[1];
+        });
+      }
+      var evalCols=allEvals.map(function(ev){ return evalMap[ev]!==undefined?evalMap[ev]:'—'; });
+      return [i+1,r.proctor,r.count].concat(evalCols).concat([r.high,r.low,r.used,
+        typeof r.avg==='number'?r.avg.toFixed(2):r.avg,r.rating,r.status]);
     });
     var wb=XLSX.utils.book_new();
     var ws=XLSX.utils.aoa_to_sheet([hdrs].concat(rows));
