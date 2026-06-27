@@ -212,6 +212,7 @@
     </div>
     <div style="display:flex;gap:8px;align-items:flex-end;">
       <button class="btn btn-primary" style="padding:8px 20px;font-size:13px;" onclick="generateReport()">🔍 Search</button>
+      <button class="btn btn-secondary" style="padding:8px 14px;font-size:12px;" onclick="showAllReport()">Show All</button>
       <button class="btn btn-outline" style="padding:8px 14px;font-size:12px;" onclick="clearReportFilters()">✕ Clear</button>
     </div>
   </div>
@@ -512,6 +513,22 @@
     _reportData=[];
   }
 
+  function showAllReport() {
+    document.getElementById('rpt-week').value='';
+    document.getElementById('rpt-from').value='';
+    document.getElementById('rpt-to').value='';
+    var rptTbl=document.getElementById('rpt-tbl'), rptMeta=document.getElementById('rpt-meta');
+    rptTbl.innerHTML='<div class="empty">Loading data…</div>';
+    rptMeta.textContent='Loading…';
+    jsonp(SCRIPT_URL + '?action=get&t=' + Date.now())
+      .then(function(result){
+        _rows=(result.status==='ok'&&result.data)?result.data:[];
+        // Build report with no date filter
+        buildReportWithRange(null, null, 'All Records');
+      })
+      .catch(function(){ rptTbl.innerHTML='<div class="empty">Error loading. Please try again.</div>'; });
+  }
+
   function generateReport() {
     var rptTbl=document.getElementById('rpt-tbl'), rptMeta=document.getElementById('rpt-meta');
     var weekStr=document.getElementById('rpt-week').value;
@@ -535,24 +552,9 @@
   }
 
   function buildReport() {
-    var rptTbl=document.getElementById('rpt-tbl'), rptMeta=document.getElementById('rpt-meta');
     var weekStr=document.getElementById('rpt-week').value;
     var fromStr=document.getElementById('rpt-from').value;
     var toStr=document.getElementById('rpt-to').value;
-
-    if (!_rows.length) {
-      rptTbl.innerHTML='<div class="empty">No records found. Please try again.</div>';
-      rptMeta.textContent='No records'; return;
-    }
-
-    // Build evaluator list from ALL rows in the sheet (not just filtered period)
-    // This ensures all evaluators always appear as columns
-    var evalSet={};
-    _rows.forEach(function(row){
-      var ev=String(row[7]||'').trim();
-      if(ev) evalSet[ev]=true;
-    });
-    var allEvaluators=Object.keys(evalSet).sort();
     var start, end, periodLabel;
     if (weekStr) {
       var wr=getWeekRange(weekStr); start=wr.start; end=wr.end;
@@ -564,9 +566,32 @@
       periodLabel=(fromStr||'—')+' to '+(toStr||'—');
       document.getElementById('rpt-week').value='';
     }
+    buildReportWithRange(start, end, periodLabel);
+  }
+
+  function buildReportWithRange(start, end, periodLabel) {
+    var rptTbl=document.getElementById('rpt-tbl'), rptMeta=document.getElementById('rpt-meta');
+
+    if (!_rows.length) {
+      rptTbl.innerHTML='<div class="empty">No records found. Please try again.</div>';
+      rptMeta.textContent='No records'; return;
+    }
+
+    // Build evaluator list from ALL rows in sheet
+    var evalSet={};
+    _rows.forEach(function(row){
+      var ev=String(row[7]||'').trim();
+      if(ev) evalSet[ev]=true;
+    });
+    var allEvaluators=Object.keys(evalSet).sort();
     var byProctor={};
     _rows.forEach(function(row){
+      // Filter by Session Date (row[2]) — the date of the proctored session
       var d=parseDate(row[2]);
+      if (!d) {
+        // Fallback: try Date Evaluated (row[5])
+        d=parseDate(row[5]);
+      }
       if (!d) return;
       if (start&&d<start) return;
       if (end&&d>end) return;
