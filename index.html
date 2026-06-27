@@ -465,12 +465,29 @@
 
   function parseDate(str) {
     if (!str) return null;
+    var s = String(str).trim();
+    if (!s || s === '' || s === 'null' || s === 'undefined') return null;
     var d;
-    if (String(str).indexOf('/') !== -1) {
-      var p = String(str).split('/');
+    // MM/dd/yyyy
+    if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(s)) {
+      var p = s.split('/');
       d = new Date(parseInt(p[2]), parseInt(p[0])-1, parseInt(p[1]));
-    } else { d = new Date(String(str)); }
-    return isNaN(d.getTime()) ? null : d;
+    }
+    // yyyy-MM-dd
+    else if (/^\d{4}-\d{2}-\d{2}$/.test(s)) {
+      var p2 = s.split('-');
+      d = new Date(parseInt(p2[0]), parseInt(p2[1])-1, parseInt(p2[2]));
+    }
+    // dd/MM/yyyy
+    else if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(s)) {
+      var p3 = s.split('/');
+      d = new Date(parseInt(p3[2]), parseInt(p3[1])-1, parseInt(p3[0]));
+    }
+    // Try native Date parse as last resort
+    else {
+      d = new Date(s);
+    }
+    return (!d || isNaN(d.getTime())) ? null : d;
   }
 
   function getWeekRange(weekStr) {
@@ -480,7 +497,9 @@
     var mon=new Date(jan4);
     mon.setDate(jan4.getDate()-((jan4.getDay()+6)%7)+(week-1)*7);
     mon.setHours(0,0,0,0);
-    var sun=new Date(mon); sun.setDate(mon.getDate()+6); sun.setHours(23,59,59,999);
+    var sun=new Date(mon);
+    sun.setDate(mon.getDate()+6);
+    sun.setHours(23,59,59,999);
     return { start:mon, end:sun };
   }
 
