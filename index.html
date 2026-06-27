@@ -556,12 +556,8 @@
     var rl=function(s){ return s>=90?'Excellent':s>=75?'Good':s>=50?'Needs Improvement':s>0?'Unsatisfactory':'—'; };
     var rb=function(s){ return s>=90?'b-exc':s>=75?'b-good':s>=50?'b-rni':'b-unsat'; };
 
-    // Collect all unique evaluators across all proctors (sorted)
-    var evalSet={};
-    proctors.forEach(function(p){
-      byProctor[p].forEach(function(e){ evalSet[e.evaluator]=true; });
-    });
-    var allEvaluators=Object.keys(evalSet).sort();
+    // Always show all 5 evaluators as fixed columns
+    var allEvaluators=['Mary Jane Austria','Gian Bennith Garcia','Dianne Candano','Ralph Angelo Soriano','Ralph Maullion'];
 
     _reportData=[];
     var html='<div style="font-size:12px;color:var(--tm);margin-bottom:12px;font-weight:600;">📅 '+periodLabel+'</div>';
@@ -649,14 +645,7 @@
 
   function exportReportExcel() {
     if (!_reportData.length){ toast('No report data. Generate a report first.','error'); return; }
-    // Build evaluator list from report data
-    var evalSet={};
-    _reportData.forEach(function(r){
-      if(r.evaluators) r.evaluators.split(', ').forEach(function(e){
-        var name=e.split(': ')[0]; if(name&&name!=='—') evalSet[name]=true;
-      });
-    });
-    var allEvals=Object.keys(evalSet).sort();
+    var allEvals=['Mary Jane Austria','Gian Bennith Garcia','Dianne Candano','Ralph Angelo Soriano','Ralph Maullion'];
     var hdrs=['#','Proctor','Sessions'].concat(allEvals).concat(['Excluded High','Excluded Low','Used Scores (3)','Average Grade','Rating','Status']);
     var rows=_reportData.map(function(r,i){
       // Parse evaluator scores from stored text
