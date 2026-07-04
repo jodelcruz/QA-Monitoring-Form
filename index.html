@@ -518,15 +518,23 @@
     document.getElementById('rpt-from').value='';
     document.getElementById('rpt-to').value='';
     var rptTbl=document.getElementById('rpt-tbl'), rptMeta=document.getElementById('rpt-meta');
-    rptTbl.innerHTML='<div class="empty">Loading data…</div>';
+    rptTbl.innerHTML='<div class="empty">⏳ Fetching latest data from Google Sheets…</div>';
     rptMeta.textContent='Loading…';
     jsonp(SCRIPT_URL + '?action=get&t=' + Date.now())
       .then(function(result){
-        _rows=(result.status==='ok'&&result.data)?result.data:[];
-        // Build report with no date filter
-        buildReportWithRange(null, null, 'All Records');
+        if (result.status==='ok' && result.data && result.data.length > 0) {
+          _rows=result.data;
+          buildReportWithRange(null, null, 'All Records');
+        } else {
+          rptTbl.innerHTML='<div class="empty">No records found in the Google Sheet yet.</div>';
+          rptMeta.textContent='0 records';
+        }
       })
-      .catch(function(){ rptTbl.innerHTML='<div class="empty">Error loading. Please try again.</div>'; });
+      .catch(function(e){
+        rptTbl.innerHTML='<div class="empty">⚠ Could not connect to Google Sheets. Please check your connection and try again.</div>';
+        rptMeta.textContent='Connection error';
+        console.error(e);
+      });
   }
 
   function generateReport() {
@@ -538,16 +546,29 @@
       rptTbl.innerHTML='<div class="empty">Select a week or date range above to generate the report.</div>';
       rptMeta.textContent='Select a week to generate the report.'; return;
     }
-    // Always fetch fresh data before computing
-    rptTbl.innerHTML='<div class="empty">Loading data…</div>';
+    rptTbl.innerHTML='<div class="empty">⏳ Fetching latest data from Google Sheets…</div>';
     rptMeta.textContent='Loading…';
     jsonp(SCRIPT_URL + '?action=get&t=' + Date.now())
       .then(function(result){
-        _rows = (result.status==='ok'&&result.data) ? result.data : [];
-        buildReport();
+        if (result.status==='ok' && result.data && result.data.length > 0) {
+          _rows = result.data;
+          buildReport();
+        } else if (result.status==='ok' && (!result.data || result.data.length===0)) {
+          rptTbl.innerHTML='<div class="empty">No records found in the Google Sheet yet.</div>';
+          rptMeta.textContent='0 records';
+        } else {
+          rptTbl.innerHTML='<div class="empty">Error from server: '+(result.message||'Unknown error')+'</div>';
+        }
       })
-      .catch(function(){
-        buildReport();
+      .catch(function(e){
+        // If fetch fails but we have cached rows, use them
+        if (_rows && _rows.length > 0) {
+          buildReport();
+        } else {
+          rptTbl.innerHTML='<div class="empty">⚠ Could not connect to Google Sheets. Please check your internet connection and try again.</div>';
+          rptMeta.textContent='Connection error';
+        }
+        console.error(e);
       });
   }
 
