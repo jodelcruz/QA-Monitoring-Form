@@ -185,39 +185,11 @@
   </div>
 
   <!-- FILTER PANEL -->
-  <div style="background:var(--white);border:1px solid var(--bd);border-radius:10px;padding:14px 18px;margin-bottom:14px;">
-    <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gd);margin-bottom:10px;">🔍 Filter Records</div>
-    <div style="display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;">
-      <div style="display:flex;flex-direction:column;gap:3px;min-width:180px;">
-        <label style="font-size:9.5px;font-weight:600;letter-spacing:.4px;color:var(--tm);text-transform:uppercase;">Proctor</label>
-        <select id="mf-proctor" style="font-family:'Inter',sans-serif;font-size:12px;padding:7px 10px;border:1px solid var(--bd);border-radius:5px;outline:none;background:var(--off);appearance:none;background-image:url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%279%27 height=%279%27 viewBox=%270 0 12 12%27%3E%3Cpath fill=%27%232d6a45%27 d=%27M6 8L1 3h10z%27/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 8px center;padding-right:24px;cursor:pointer;">
-          <option value="">All Proctors</option>
-          <option>Christopher de Leon</option><option>Sebastian Tamayo</option><option>Keenan Handugan</option>
-          <option>Grace Remolacio</option><option>Khate Cyrelle Amil</option><option>Rachelle Raymundo</option>
-          <option>Kathy Leonar</option><option>Rose Ann Parafina</option><option>Romina Marie Dumlao</option>
-          <option>Mark Pesico</option><option>John Paul Racines</option><option>Sunshine Faith Broñosa</option>
-          <option>Bobzer San Juan</option><option>Moses Cawil</option>
-        </select>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:3px;min-width:180px;">
-        <label style="font-size:9.5px;font-weight:600;letter-spacing:.4px;color:var(--tm);text-transform:uppercase;">Evaluated By</label>
-        <select id="mf-evalby" style="font-family:'Inter',sans-serif;font-size:12px;padding:7px 10px;border:1px solid var(--bd);border-radius:5px;outline:none;background:var(--off);appearance:none;background-image:url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%279%27 height=%279%27 viewBox=%270 0 12 12%27%3E%3Cpath fill=%27%232d6a45%27 d=%27M6 8L1 3h10z%27/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 8px center;padding-right:24px;cursor:pointer;">
-          <option value="">All Evaluators</option>
-          <option>Mary Jane Austria</option><option>Gian Bennith Garcia</option>
-          <option>Dianne Candano</option><option>Ralph Angelo Soriano</option><option>Ralph Maullion</option>
-        </select>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:3px;min-width:160px;">
-        <label style="font-size:9.5px;font-weight:600;letter-spacing:.4px;color:var(--tm);text-transform:uppercase;">Rating</label>
-        <select id="mf-rating" style="font-family:'Inter',sans-serif;font-size:12px;padding:7px 10px;border:1px solid var(--bd);border-radius:5px;outline:none;background:var(--off);appearance:none;background-image:url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%279%27 height=%279%27 viewBox=%270 0 12 12%27%3E%3Cpath fill=%27%232d6a45%27 d=%27M6 8L1 3h10z%27/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 8px center;padding-right:24px;cursor:pointer;">
-          <option value="">All Ratings</option>
-          <option>Excellent</option><option>Good</option><option>Needs Improvement</option><option>Unsatisfactory</option>
-        </select>
-      </div>
-      <div style="display:flex;gap:8px;align-items:flex-end;">
-        <button class="btn btn-primary" style="padding:7px 18px;font-size:12px;" onclick="applyMgrFilters()">🔍 Search</button>
-        <button class="btn btn-outline" style="padding:7px 12px;font-size:11px;" onclick="clearMgrFilters()">✕ Clear</button>
-      </div>
+  <div style="background:var(--white);border:1px solid var(--bd);border-radius:10px;padding:12px 18px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+    <span style="font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gd);">🔍 Column Filters — type or select below each header</span>
+    <div style="display:flex;gap:8px;">
+      <button class="btn btn-primary" style="padding:6px 16px;font-size:12px;" onclick="applyMgrFilters()">🔍 Search</button>
+      <button class="btn btn-outline" style="padding:6px 12px;font-size:11px;" onclick="clearMgrFilters()">✕ Clear</button>
     </div>
   </div>
 
@@ -492,27 +464,47 @@
 
   // ── Manager Filters ────────────────────────────────────────────────
   function applyMgrFilters() {
-    var fP  = document.getElementById('mf-proctor').value;
-    var fE  = document.getElementById('mf-evalby').value;
-    var fRt = document.getElementById('mf-rating').value;
+    var gf=function(id){ var el=document.getElementById(id); return el?el.value.trim():''; };
+    var fSubmitted = gf('cf-submitted').toLowerCase();
+    var fProctor   = gf('cf-proctor');
+    var fSdate     = gf('cf-sdate');
+    var fOrg       = gf('cf-org').toLowerCase();
+    var fUrl       = gf('cf-url').toLowerCase();
+    var fDeval     = gf('cf-deval');
+    var fRcode     = gf('cf-rcode').toLowerCase();
+    var fEvalby    = gf('cf-evalby');
+    var fCats      = [gf('cf-cat0'),gf('cf-cat1'),gf('cf-cat2'),gf('cf-cat3'),gf('cf-cat4'),gf('cf-cat5')];
+    var fComments  = gf('cf-comments').toLowerCase();
+    var fScore     = gf('cf-score');
+    var fRating    = gf('cf-rating');
 
-    var filtered = _rows.filter(function(row){
-      if (fP  && row[1]  !== fP)  return false;
-      if (fE  && row[7]  !== fE)  return false;
-      if (fRt && row[16] !== fRt) return false;
+    var filtered=_rows.filter(function(row){
+      if (fSubmitted && String(row[0]||'').toLowerCase().indexOf(fSubmitted)===-1) return false;
+      if (fProctor   && row[1]!==fProctor)  return false;
+      if (fSdate     && row[2]!==fSdate)    return false;
+      if (fOrg       && String(row[3]||'').toLowerCase().indexOf(fOrg)===-1)      return false;
+      if (fUrl       && String(row[4]||'').toLowerCase().indexOf(fUrl)===-1)      return false;
+      if (fDeval     && row[5]!==fDeval)    return false;
+      if (fRcode     && String(row[6]||'').toLowerCase().indexOf(fRcode)===-1)    return false;
+      if (fEvalby    && row[7]!==fEvalby)   return false;
+      for (var ci=0;ci<6;ci++) { if (fCats[ci] && row[8+ci]!==fCats[ci]) return false; }
+      if (fComments  && String(row[14]||'').toLowerCase().indexOf(fComments)===-1) return false;
+      if (fScore     && String(row[15]||'')!==fScore) return false;
+      if (fRating    && row[16]!==fRating)  return false;
       return true;
     });
-
-    var meta = document.getElementById('mgr-meta');
-    meta.textContent = filtered.length + ' of ' + _rows.length + ' record' + (_rows.length !== 1 ? 's' : '');
+    var meta=document.getElementById('mgr-meta');
+    meta.textContent=filtered.length+' of '+_rows.length+' record'+(_rows.length!==1?'s':'');
     renderTable(filtered);
   }
 
   function clearMgrFilters() {
-    ['mf-proctor','mf-evalby','mf-rating']
+    ['cf-submitted','cf-proctor','cf-sdate','cf-org','cf-url','cf-deval','cf-rcode',
+     'cf-evalby','cf-cat0','cf-cat1','cf-cat2','cf-cat3','cf-cat4','cf-cat5',
+     'cf-comments','cf-score','cf-rating']
       .forEach(function(id){ var el=document.getElementById(id); if(el) el.value=''; });
-    var meta = document.getElementById('mgr-meta');
-    meta.textContent = _rows.length + ' record' + (_rows.length !== 1 ? 's' : '') + ' total';
+    var meta=document.getElementById('mgr-meta');
+    meta.textContent=_rows.length+' record'+(_rows.length!==1?'s':'')+' total';
     renderTable(_rows);
   }
 
@@ -523,7 +515,38 @@
     var bc=function(v){ return v==='Pass'?'b-pass':v==='Fail'?'b-fail':v==='Needs Improvement'?'b-ni':'b-na'; };
     var rc=function(r){ return r==='Excellent'?'b-exc':r==='Good'?'b-good':r==='Needs Improvement'?'b-rni':'b-unsat'; };
     var hs=['#','Submitted At','Proctor','Session Date','Org & Exam','Session URL','Date Evaluated','Res. Code','Evaluated By'].concat(CAT_LABELS).concat(['Comments','Score','Rating']);
-    var h='<table><thead><tr>'+hs.map(function(x){ return '<th>'+x+'</th>'; }).join('')+'</tr></thead><tbody>';
+
+    var fi='font-family:Inter,sans-serif;font-size:10px;width:100%;padding:3px 5px;border:1px solid #c4ddd0;border-radius:4px;outline:none;background:#f7faf8;color:#0d0d0d;box-sizing:border-box;';
+    var si='font-family:Inter,sans-serif;font-size:10px;width:100%;padding:3px 5px;border:1px solid #c4ddd0;border-radius:4px;outline:none;background:#f7faf8;color:#0d0d0d;box-sizing:border-box;appearance:none;cursor:pointer;';
+
+    // Build filter row under headers
+    var filterRow='<tr style="background:#e6f4ec;">'
+      +'<td></td>'
+      +'<td><input id="cf-submitted" style="'+fi+'" placeholder="Search…" onkeydown="if(event.key===\'Enter\')applyMgrFilters()"></td>'
+      +'<td><select id="cf-proctor" style="'+si+'"><option value="">All</option>'
+        +['Christopher de Leon','Sebastian Tamayo','Keenan Handugan','Grace Remolacio','Khate Cyrelle Amil','Rachelle Raymundo','Kathy Leonar','Rose Ann Parafina','Romina Marie Dumlao','Mark Pesico','John Paul Racines','Sunshine Faith Broñosa','Bobzer San Juan','Moses Cawil']
+        .map(function(n){return '<option>'+n+'</option>';}).join('')+'</select></td>'
+      +'<td><input id="cf-sdate" type="date" style="'+fi+'" onkeydown="if(event.key===\'Enter\')applyMgrFilters()"></td>'
+      +'<td><input id="cf-org" style="'+fi+'" placeholder="Search…" onkeydown="if(event.key===\'Enter\')applyMgrFilters()"></td>'
+      +'<td><input id="cf-url" style="'+fi+'" placeholder="Search…" onkeydown="if(event.key===\'Enter\')applyMgrFilters()"></td>'
+      +'<td><input id="cf-deval" type="date" style="'+fi+'" onkeydown="if(event.key===\'Enter\')applyMgrFilters()"></td>'
+      +'<td><input id="cf-rcode" style="'+fi+'" placeholder="Search…" onkeydown="if(event.key===\'Enter\')applyMgrFilters()"></td>'
+      +'<td><select id="cf-evalby" style="'+si+'"><option value="">All</option>'
+        +['Mary Jane Austria','Gian Bennith Garcia','Dianne Candano','Ralph Angelo Soriano','Ralph Maullion']
+        .map(function(n){return '<option>'+n+'</option>';}).join('')+'</select></td>'
+      +['Pass/Fail/NI/NA','Pass/Fail/NI/NA','Pass/Fail/NI/NA','Pass/Fail/NI/NA','Pass/Fail/NI/NA','Pass/Fail/NI/NA'].map(function(_,ci){
+        return '<td><select id="cf-cat'+ci+'" style="'+si+'"><option value="">All</option><option>Pass</option><option>Fail</option><option>Needs Improvement</option><option>N/A</option></select></td>';
+      }).join('')
+      +'<td><input id="cf-comments" style="'+fi+'" placeholder="Search…" onkeydown="if(event.key===\'Enter\')applyMgrFilters()"></td>'
+      +'<td><input id="cf-score" style="'+fi+'" placeholder="e.g. 90" onkeydown="if(event.key===\'Enter\')applyMgrFilters()"></td>'
+      +'<td><select id="cf-rating" style="'+si+'"><option value="">All</option><option>Excellent</option><option>Good</option><option>Needs Improvement</option><option>Unsatisfactory</option></select></td>'
+      +'</tr>';
+
+    var h='<table><thead>'
+      +'<tr>'+hs.map(function(x){ return '<th>'+x+'</th>'; }).join('')+'</tr>'
+      +filterRow
+      +'</thead><tbody>';
+
     rows.forEach(function(r,i){
       h+='<tr><td>'+(i+1)+'</td><td style="white-space:nowrap">'+(r[0]||'')+'</td>'
         +'<td><b>'+(r[1]||'')+'</b></td><td style="white-space:nowrap">'+(r[2]||'')+'</td>'
