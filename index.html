@@ -183,6 +183,44 @@
       <button class="btn btn-secondary" onclick="loadMgr()">🔄 Refresh</button>
     </div>
   </div>
+
+  <!-- FILTER PANEL -->
+  <div style="background:var(--white);border:1px solid var(--bd);border-radius:10px;padding:14px 18px;margin-bottom:14px;">
+    <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gd);margin-bottom:10px;">🔍 Filter Records</div>
+    <div style="display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;">
+      <div style="display:flex;flex-direction:column;gap:3px;min-width:180px;">
+        <label style="font-size:9.5px;font-weight:600;letter-spacing:.4px;color:var(--tm);text-transform:uppercase;">Proctor</label>
+        <select id="mf-proctor" style="font-family:'Inter',sans-serif;font-size:12px;padding:7px 10px;border:1px solid var(--bd);border-radius:5px;outline:none;background:var(--off);appearance:none;background-image:url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%279%27 height=%279%27 viewBox=%270 0 12 12%27%3E%3Cpath fill=%27%232d6a45%27 d=%27M6 8L1 3h10z%27/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 8px center;padding-right:24px;cursor:pointer;">
+          <option value="">All Proctors</option>
+          <option>Christopher de Leon</option><option>Sebastian Tamayo</option><option>Keenan Handugan</option>
+          <option>Grace Remolacio</option><option>Khate Cyrelle Amil</option><option>Rachelle Raymundo</option>
+          <option>Kathy Leonar</option><option>Rose Ann Parafina</option><option>Romina Marie Dumlao</option>
+          <option>Mark Pesico</option><option>John Paul Racines</option><option>Sunshine Faith Broñosa</option>
+          <option>Bobzer San Juan</option><option>Moses Cawil</option>
+        </select>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:3px;min-width:180px;">
+        <label style="font-size:9.5px;font-weight:600;letter-spacing:.4px;color:var(--tm);text-transform:uppercase;">Evaluated By</label>
+        <select id="mf-evalby" style="font-family:'Inter',sans-serif;font-size:12px;padding:7px 10px;border:1px solid var(--bd);border-radius:5px;outline:none;background:var(--off);appearance:none;background-image:url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%279%27 height=%279%27 viewBox=%270 0 12 12%27%3E%3Cpath fill=%27%232d6a45%27 d=%27M6 8L1 3h10z%27/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 8px center;padding-right:24px;cursor:pointer;">
+          <option value="">All Evaluators</option>
+          <option>Mary Jane Austria</option><option>Gian Bennith Garcia</option>
+          <option>Dianne Candano</option><option>Ralph Angelo Soriano</option><option>Ralph Maullion</option>
+        </select>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:3px;min-width:160px;">
+        <label style="font-size:9.5px;font-weight:600;letter-spacing:.4px;color:var(--tm);text-transform:uppercase;">Rating</label>
+        <select id="mf-rating" style="font-family:'Inter',sans-serif;font-size:12px;padding:7px 10px;border:1px solid var(--bd);border-radius:5px;outline:none;background:var(--off);appearance:none;background-image:url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%279%27 height=%279%27 viewBox=%270 0 12 12%27%3E%3Cpath fill=%27%232d6a45%27 d=%27M6 8L1 3h10z%27/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 8px center;padding-right:24px;cursor:pointer;">
+          <option value="">All Ratings</option>
+          <option>Excellent</option><option>Good</option><option>Needs Improvement</option><option>Unsatisfactory</option>
+        </select>
+      </div>
+      <div style="display:flex;gap:8px;align-items:flex-end;">
+        <button class="btn btn-primary" style="padding:7px 18px;font-size:12px;" onclick="applyMgrFilters()">🔍 Search</button>
+        <button class="btn btn-outline" style="padding:7px 12px;font-size:11px;" onclick="clearMgrFilters()">✕ Clear</button>
+      </div>
+    </div>
+  </div>
+
   <div class="table-wrap"><div id="tbl"><div class="empty">Loading records…</div></div></div>
 </div>
 </div>
@@ -258,17 +296,37 @@
   var _reportData = [];
   var _targetTab  = 'mgr';
 
-  // ── JSONP ──────────────────────────────────────────────────────────
-  function jsonp(url) {
+  // ── JSONP with retry ───────────────────────────────────────────────
+  function jsonp(url, retries) {
+    retries = retries || 0;
     return new Promise(function(resolve, reject) {
-      var cb = 'cb_' + Date.now() + '_' + Math.floor(Math.random()*10000);
+      var cb = 'cb_' + Date.now() + '_' + Math.floor(Math.random()*99999);
       var s  = document.createElement('script');
-      var t  = setTimeout(function(){ cleanup(); reject(new Error('Timeout')); }, 15000);
+      var t  = setTimeout(function(){
+        cleanup();
+        if (retries < 2) {
+          jsonp(url, retries + 1).then(resolve).catch(reject);
+        } else {
+          reject(new Error('Timeout after retries'));
+        }
+      }, 15000);
       function cleanup(){ delete window[cb]; if(s.parentNode) s.parentNode.removeChild(s); clearTimeout(t); }
       window[cb] = function(data){ cleanup(); resolve(data); };
-      s.onerror  = function(){ cleanup(); reject(new Error('Script load error')); };
-      s.src = url + (url.indexOf('?') === -1 ? '?' : '&') + 'callback=' + cb;
-      document.body.appendChild(s);
+      s.onerror = function(){
+        cleanup();
+        if (retries < 2) {
+          // Wait 1s before retry
+          setTimeout(function(){
+            jsonp(url, retries + 1).then(resolve).catch(reject);
+          }, 1000);
+        } else {
+          reject(new Error('Script load error after ' + retries + ' retries'));
+        }
+      };
+      // Add unique timestamp to bust cache on every call
+      var sep = url.indexOf('?') === -1 ? '?' : '&';
+      s.src = url + sep + 'callback=' + cb + '&_t=' + Date.now();
+      document.head.appendChild(s);
     });
   }
 
@@ -430,6 +488,32 @@
         tbl.innerHTML='<div class="empty">Error loading records. Please try again.</div>';
         meta.textContent='Error'; console.error(e);
       });
+  }
+
+  // ── Manager Filters ────────────────────────────────────────────────
+  function applyMgrFilters() {
+    var fP  = document.getElementById('mf-proctor').value;
+    var fE  = document.getElementById('mf-evalby').value;
+    var fRt = document.getElementById('mf-rating').value;
+
+    var filtered = _rows.filter(function(row){
+      if (fP  && row[1]  !== fP)  return false;
+      if (fE  && row[7]  !== fE)  return false;
+      if (fRt && row[16] !== fRt) return false;
+      return true;
+    });
+
+    var meta = document.getElementById('mgr-meta');
+    meta.textContent = filtered.length + ' of ' + _rows.length + ' record' + (_rows.length !== 1 ? 's' : '');
+    renderTable(filtered);
+  }
+
+  function clearMgrFilters() {
+    ['mf-proctor','mf-evalby','mf-rating']
+      .forEach(function(id){ var el=document.getElementById(id); if(el) el.value=''; });
+    var meta = document.getElementById('mgr-meta');
+    meta.textContent = _rows.length + ' record' + (_rows.length !== 1 ? 's' : '') + ' total';
+    renderTable(_rows);
   }
 
   // ── Render table ───────────────────────────────────────────────────
