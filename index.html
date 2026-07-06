@@ -519,34 +519,45 @@
     var fi='font-family:Inter,sans-serif;font-size:10px;width:100%;padding:3px 5px;border:1px solid #c4ddd0;border-radius:4px;outline:none;background:#f7faf8;color:#0d0d0d;box-sizing:border-box;';
     var si='font-family:Inter,sans-serif;font-size:10px;width:100%;padding:3px 5px;border:1px solid #c4ddd0;border-radius:4px;outline:none;background:#f7faf8;color:#0d0d0d;box-sizing:border-box;appearance:none;cursor:pointer;';
 
-    // Build filter row under headers
-    var filterRow='<tr style="background:#e6f4ec;">'
-      +'<td></td>'
-      +'<td><input id="cf-submitted" style="'+fi+'" placeholder="Search…" onkeydown="if(event.key===\'Enter\')applyMgrFilters()"></td>'
-      +'<td><select id="cf-proctor" style="'+si+'"><option value="">All</option>'
-        +['Christopher de Leon','Sebastian Tamayo','Keenan Handugan','Grace Remolacio','Khate Cyrelle Amil','Rachelle Raymundo','Kathy Leonar','Rose Ann Parafina','Romina Marie Dumlao','Mark Pesico','John Paul Racines','Sunshine Faith Broñosa','Bobzer San Juan','Moses Cawil']
-        .map(function(n){return '<option>'+n+'</option>';}).join('')+'</select></td>'
-      +'<td><input id="cf-sdate" type="date" style="'+fi+'" onkeydown="if(event.key===\'Enter\')applyMgrFilters()"></td>'
-      +'<td><input id="cf-org" style="'+fi+'" placeholder="Search…" onkeydown="if(event.key===\'Enter\')applyMgrFilters()"></td>'
-      +'<td><input id="cf-url" style="'+fi+'" placeholder="Search…" onkeydown="if(event.key===\'Enter\')applyMgrFilters()"></td>'
-      +'<td><input id="cf-deval" type="date" style="'+fi+'" onkeydown="if(event.key===\'Enter\')applyMgrFilters()"></td>'
-      +'<td><input id="cf-rcode" style="'+fi+'" placeholder="Search…" onkeydown="if(event.key===\'Enter\')applyMgrFilters()"></td>'
-      +'<td><select id="cf-evalby" style="'+si+'"><option value="">All</option>'
-        +['Mary Jane Austria','Gian Bennith Garcia','Dianne Candano','Ralph Angelo Soriano','Ralph Maullion']
-        .map(function(n){return '<option>'+n+'</option>';}).join('')+'</select></td>'
-      +['Pass/Fail/NI/NA','Pass/Fail/NI/NA','Pass/Fail/NI/NA','Pass/Fail/NI/NA','Pass/Fail/NI/NA','Pass/Fail/NI/NA'].map(function(_,ci){
-        return '<td><select id="cf-cat'+ci+'" style="'+si+'"><option value="">All</option><option>Pass</option><option>Fail</option><option>Needs Improvement</option><option>N/A</option></select></td>';
-      }).join('')
-      +'<td><input id="cf-comments" style="'+fi+'" placeholder="Search…" onkeydown="if(event.key===\'Enter\')applyMgrFilters()"></td>'
-      +'<td><input id="cf-score" style="'+fi+'" placeholder="e.g. 90" onkeydown="if(event.key===\'Enter\')applyMgrFilters()"></td>'
-      +'<td><select id="cf-rating" style="'+si+'"><option value="">All</option><option>Excellent</option><option>Good</option><option>Needs Improvement</option><option>Unsatisfactory</option></select></td>'
-      +'</tr>';
+    // Only build the full table (with filter row) if it doesn't exist yet
+    var existing = document.getElementById('mgr-table');
+    if (!existing) {
+      var fi2='font-family:Inter,sans-serif;font-size:10px;width:100%;padding:3px 5px;border:1px solid #c4ddd0;border-radius:4px;outline:none;background:#f7faf8;color:#0d0d0d;box-sizing:border-box;';
+      var si2='font-family:Inter,sans-serif;font-size:10px;width:100%;padding:3px 5px;border:1px solid #c4ddd0;border-radius:4px;outline:none;background:#f7faf8;color:#0d0d0d;box-sizing:border-box;appearance:none;cursor:pointer;';
+      var filterRow='<tr style="background:#e6f4ec;" id="mgr-filter-row">'
+        +'<td></td>'
+        +'<td><input id="cf-submitted" style="'+fi2+'" placeholder="Search…" onkeydown="if(event.key===\'Enter\')applyMgrFilters()"></td>'
+        +'<td><select id="cf-proctor" style="'+si2+'"><option value="">All</option>'
+          +['Christopher de Leon','Sebastian Tamayo','Keenan Handugan','Grace Remolacio','Khate Cyrelle Amil','Rachelle Raymundo','Kathy Leonar','Rose Ann Parafina','Romina Marie Dumlao','Mark Pesico','John Paul Racines','Sunshine Faith Broñosa','Bobzer San Juan','Moses Cawil']
+          .map(function(n){return '<option>'+n+'</option>';}).join('')+'</select></td>'
+        +'<td><input id="cf-sdate" type="date" style="'+fi2+'" onkeydown="if(event.key===\'Enter\')applyMgrFilters()"></td>'
+        +'<td><input id="cf-org" style="'+fi2+'" placeholder="Search…" onkeydown="if(event.key===\'Enter\')applyMgrFilters()"></td>'
+        +'<td><input id="cf-url" style="'+fi2+'" placeholder="Search…" onkeydown="if(event.key===\'Enter\')applyMgrFilters()"></td>'
+        +'<td><input id="cf-deval" type="date" style="'+fi2+'" onkeydown="if(event.key===\'Enter\')applyMgrFilters()"></td>'
+        +'<td><input id="cf-rcode" style="'+fi2+'" placeholder="Search…" onkeydown="if(event.key===\'Enter\')applyMgrFilters()"></td>'
+        +'<td><select id="cf-evalby" style="'+si2+'"><option value="">All</option>'
+          +['Mary Jane Austria','Gian Bennith Garcia','Dianne Candano','Ralph Angelo Soriano','Ralph Maullion']
+          .map(function(n){return '<option>'+n+'</option>';}).join('')+'</select></td>'
+        +[0,1,2,3,4,5].map(function(ci){
+          return '<td><select id="cf-cat'+ci+'" style="'+si2+'"><option value="">All</option><option>Pass</option><option>Fail</option><option>Needs Improvement</option><option>N/A</option></select></td>';
+        }).join('')
+        +'<td><input id="cf-comments" style="'+fi2+'" placeholder="Search…" onkeydown="if(event.key===\'Enter\')applyMgrFilters()"></td>'
+        +'<td><input id="cf-score" style="'+fi2+'" placeholder="e.g. 90" onkeydown="if(event.key===\'Enter\')applyMgrFilters()"></td>'
+        +'<td><select id="cf-rating" style="'+si2+'"><option value="">All</option><option>Excellent</option><option>Good</option><option>Needs Improvement</option><option>Unsatisfactory</option></select></td>'
+        +'</tr>';
 
-    var h='<table><thead>'
-      +'<tr>'+hs.map(function(x){ return '<th>'+x+'</th>'; }).join('')+'</tr>'
-      +filterRow
-      +'</thead><tbody>';
+      var tableHtml='<table id="mgr-table"><thead>'
+        +'<tr>'+hs.map(function(x){ return '<th>'+x+'</th>'; }).join('')+'</tr>'
+        +filterRow
+        +'</thead><tbody id="mgr-tbody"></tbody></table>';
+      tbl.innerHTML=tableHtml;
+    }
 
+    // Always just update tbody — filter row stays intact
+    var tbody=document.getElementById('mgr-tbody');
+    if (!tbody){ tbl.innerHTML=''; renderTable(rows); return; }
+
+    var h='';
     rows.forEach(function(r,i){
       h+='<tr><td>'+(i+1)+'</td><td style="white-space:nowrap">'+(r[0]||'')+'</td>'
         +'<td><b>'+(r[1]||'')+'</b></td><td style="white-space:nowrap">'+(r[2]||'')+'</td>'
@@ -558,8 +569,7 @@
         +'<td class="sc">'+(r[15]||0)+'</td>'
         +'<td><span class="bp '+rc(r[16])+'">'+(r[16]||'—')+'</span></td></tr>';
     });
-    h+='</tbody></table>';
-    tbl.innerHTML=h;
+    tbody.innerHTML = h || '<tr><td colspan="'+hs.length+'" style="text-align:center;padding:30px;color:#556b62;">No records match the current filters.</td></tr>';
   }
 
   // ── Report ─────────────────────────────────────────────────────────
