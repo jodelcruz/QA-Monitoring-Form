@@ -117,7 +117,7 @@
         <div class="fld"><label>Proctor</label>
           <select id="f-proctor">
             <option value="">— Select Proctor —</option>
-            <option>Sebastian Tamayo</option><option>Keenan Handugan</option>
+            <option>Christopher de Leon</option><option>Sebastian Tamayo</option><option>Keenan Handugan</option>
             <option>Grace Remolacio</option><option>Khate Cyrelle Amil</option><option>Rachelle Raymundo</option>
             <option>Kathy Leonar</option><option>Rose Ann Parafina</option><option>Romina Marie Dumlao</option>
             <option>Mark Pesico</option><option>John Paul Racines</option><option>Sunshine Faith Broñosa</option>
@@ -158,13 +158,13 @@
         <div class="ci"><div class="cl"><span class="cn">2</span><span>Identity Verification</span></div>
           <select class="cs" id="c2" data-pass="25" data-fail="10" data-ni="15" data-na="25"><option value="">— Select —</option><option>Pass</option><option>Fail</option><option>Needs Improvement</option><option>N/A</option></select></div>
         <div class="ci"><div class="cl"><span class="cn">3</span><span>Environment Check</span></div>
-          <select class="cs" id="c3" data-pass="25" data-fail="10" data-ni="15" data-na="25"><option value="">— Select —</option><option>Pass</option><option>Fail</option><option>Needs Improvement</option></select></div>
+          <select class="cs" id="c3" data-pass="25" data-fail="10" data-ni="15" data-na="25"><option value="">— Select —</option><option>Pass</option><option>Fail</option><option>Needs Improvement</option><option>N/A</option></select></div>
         <div class="ci"><div class="cl"><span class="cn">4</span><span>System Check (Non-SEB or SEB-disabled)</span></div>
           <select class="cs" id="c4" data-pass="10" data-fail="4" data-ni="6" data-na="10"><option value="">— Select —</option><option>Pass</option><option>Fail</option><option>Needs Improvement</option><option>N/A</option></select></div>
         <div class="ci"><div class="cl"><span class="cn">5</span><span>Incident Logging</span></div>
           <select class="cs" id="c5" data-pass="25" data-fail="10" data-ni="15" data-na="25"><option value="">— Select —</option><option>Pass</option><option>Fail</option><option>Needs Improvement</option><option>N/A</option></select></div>
         <div class="ci"><div class="cl"><span class="cn">6</span><span>Candidate Inquiry Management</span></div>
-          <select class="cs" id="c6" data-pass="10" data-fail="4" data-ni="6" data-na="10"><option value="">— Select —</option><option>Pass</option><option>Fail</option><option>Needs Improvement</option></select></div>
+          <select class="cs" id="c6" data-pass="10" data-fail="4" data-ni="6" data-na="10"><option value="">— Select —</option><option>Pass</option><option>Fail</option><option>Needs Improvement</option><option>N/A</option></select></div>
       </div>
     </div>
   </div>
@@ -218,16 +218,12 @@
     </div>
   </div>
   <div style="background:var(--white);border:1px solid var(--bd);border-radius:10px;padding:16px 20px;margin-bottom:16px;display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;">
-    <div class="fld" style="min-width:180px;">
-      <label>Select Week</label>
-      <input type="week" id="rpt-week" onkeydown="if(event.key==='Enter')generateReport()" style="font-family:'Inter',sans-serif;font-size:13px;padding:8px 12px;border:1.5px solid var(--bd);border-radius:6px;outline:none;color:var(--black);background:var(--off);cursor:pointer;">
-    </div>
-    <div class="fld" style="min-width:140px;">
-      <label>Date From</label>
+    <div class="fld" style="min-width:160px;">
+      <label>Session Date From</label>
       <input type="date" id="rpt-from" onkeydown="if(event.key==='Enter')generateReport()" style="font-family:'Inter',sans-serif;font-size:13px;padding:8px 12px;border:1.5px solid var(--bd);border-radius:6px;outline:none;color:var(--black);background:var(--off);">
     </div>
-    <div class="fld" style="min-width:140px;">
-      <label>Date To</label>
+    <div class="fld" style="min-width:160px;">
+      <label>Session Date To</label>
       <input type="date" id="rpt-to" onkeydown="if(event.key==='Enter')generateReport()" style="font-family:'Inter',sans-serif;font-size:13px;padding:8px 12px;border:1.5px solid var(--bd);border-radius:6px;outline:none;color:var(--black);background:var(--off);">
     </div>
     <div style="display:flex;gap:8px;align-items:flex-end;">
@@ -239,10 +235,10 @@
   <div style="background:var(--gl);border:1px solid var(--bd);border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:12px;color:var(--gd);line-height:1.7;">
     <strong>Scoring Rule:</strong> The <strong>Actual Average Grade</strong> is computed as the
     <strong>Total Score ÷ 5</strong> (total of all 5 evaluator scores divided by 5).
-    The grade is only computed once <strong>all 5 Candidate Support Team Members</strong> have submitted their evaluation for that proctor.
+    The grade is only computed once <strong>all 5 Candidate Support Team Members</strong> have submitted their evaluation for that proctor within the selected date range.
     Proctors with missing evaluations are marked as <strong>Incomplete</strong>.
   </div>
-  <div class="table-wrap"><div id="rpt-tbl"><div class="empty">Select a week or date range above to generate the report.</div></div></div>
+  <div class="table-wrap"><div id="rpt-tbl"><div class="empty">Select a date range above and click Search to generate the report.</div></div></div>
 </div>
 </div>
 
@@ -618,30 +614,15 @@
     return (!d || isNaN(d.getTime())) ? null : d;
   }
 
-  function getWeekRange(weekStr) {
-    var parts = weekStr.split('-W');
-    var year=parseInt(parts[0]), week=parseInt(parts[1]);
-    var jan4=new Date(year,0,4);
-    var mon=new Date(jan4);
-    mon.setDate(jan4.getDate()-((jan4.getDay()+6)%7)+(week-1)*7);
-    mon.setHours(0,0,0,0);
-    var sun=new Date(mon);
-    sun.setDate(mon.getDate()+6);
-    sun.setHours(23,59,59,999);
-    return { start:mon, end:sun };
-  }
-
   function clearReportFilters() {
-    document.getElementById('rpt-week').value='';
     document.getElementById('rpt-from').value='';
     document.getElementById('rpt-to').value='';
-    document.getElementById('rpt-tbl').innerHTML='<div class="empty">Select a week or date range above to generate the report.</div>';
-    document.getElementById('rpt-meta').textContent='Select a week to generate the report.';
+    document.getElementById('rpt-tbl').innerHTML='<div class="empty">Select a date range above and click Search to generate the report.</div>';
+    document.getElementById('rpt-meta').textContent='Select a date range to generate the report.';
     _reportData=[];
   }
 
   function showAllReport() {
-    document.getElementById('rpt-week').value='';
     document.getElementById('rpt-from').value='';
     document.getElementById('rpt-to').value='';
     var rptTbl=document.getElementById('rpt-tbl'), rptMeta=document.getElementById('rpt-meta');
@@ -666,12 +647,11 @@
 
   function generateReport() {
     var rptTbl=document.getElementById('rpt-tbl'), rptMeta=document.getElementById('rpt-meta');
-    var weekStr=document.getElementById('rpt-week').value;
     var fromStr=document.getElementById('rpt-from').value;
     var toStr=document.getElementById('rpt-to').value;
-    if (!weekStr&&!fromStr&&!toStr) {
-      rptTbl.innerHTML='<div class="empty">Select a week or date range above to generate the report.</div>';
-      rptMeta.textContent='Select a week to generate the report.'; return;
+    if (!fromStr&&!toStr) {
+      rptTbl.innerHTML='<div class="empty">Select a date range above and click Search to generate the report.</div>';
+      rptMeta.textContent='Select a date range to generate the report.'; return;
     }
     rptTbl.innerHTML='<div class="empty">⏳ Fetching latest data from Google Sheets…</div>';
     rptMeta.textContent='Loading…';
@@ -700,20 +680,12 @@
   }
 
   function buildReport() {
-    var weekStr=document.getElementById('rpt-week').value;
     var fromStr=document.getElementById('rpt-from').value;
     var toStr=document.getElementById('rpt-to').value;
-    var start, end, periodLabel;
-    if (weekStr) {
-      var wr=getWeekRange(weekStr); start=wr.start; end=wr.end;
-      periodLabel='Week of '+start.toLocaleDateString('en-PH',{month:'short',day:'numeric'})+' – '+end.toLocaleDateString('en-PH',{month:'short',day:'numeric',year:'numeric'});
-      document.getElementById('rpt-from').value=''; document.getElementById('rpt-to').value='';
-    } else {
-      start=fromStr?new Date(fromStr+'T00:00:00'):null;
-      end=toStr?new Date(toStr+'T23:59:59'):null;
-      periodLabel=(fromStr||'—')+' to '+(toStr||'—');
-      document.getElementById('rpt-week').value='';
-    }
+    var start=fromStr ? new Date(fromStr+'T00:00:00') : null;
+    var end=toStr   ? new Date(toStr+'T23:59:59')   : null;
+    var fmt=function(s){ if(!s) return '—'; var d=new Date(s+'T00:00:00'); return d.toLocaleDateString('en-PH',{month:'short',day:'numeric',year:'numeric'}); };
+    var periodLabel=fmt(fromStr)+' to '+fmt(toStr);
     buildReportWithRange(start, end, periodLabel);
   }
 
