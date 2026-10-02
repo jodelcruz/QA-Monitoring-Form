@@ -234,7 +234,7 @@
   </div>
   <div style="background:var(--gl);border:1px solid var(--bd);border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:12px;color:var(--gd);line-height:1.7;">
     <strong>Scoring Rule:</strong> The <strong>Actual Average Grade</strong> is computed as the
-    <strong>Total Score ÷ 5</strong> (total of all 5 evaluator scores divided by 5).
+    <strong>Total Score ÷ sessions covered by the selected date</strong> (total of all 5 evaluator scores divided by the sessions from the selected dates).
     The grade is only computed once <strong>all 5 Candidate Support Team Members</strong> have submitted their evaluation for that proctor within the selected date range.
     Proctors with missing evaluations are marked as <strong>Incomplete</strong>.
   </div>
@@ -322,6 +322,7 @@
       document.getElementById('panel-'+id).classList.toggle('active', id===t);
       document.getElementById('tab-'+id).classList.toggle('active', id===t);
     });
+    try { localStorage.setItem('qa_active_tab', t); } catch(e){}
     if (t === 'mgr') loadMgr();
     if (t === 'rpt' && !_rows.length) loadRowsForReport();
   }
@@ -336,7 +337,9 @@
   }
   function checkPwd() {
     if (document.getElementById('pwd-input').value === MGR_PWD) {
-      closePwd(); switchTab(_targetTab);
+      closePwd();
+      try { localStorage.setItem('qa_pwd_ok', '1'); } catch(e){}
+      switchTab(_targetTab);
     } else {
       document.getElementById('pwd-err').style.display = 'block';
       document.getElementById('pwd-input').value = '';
@@ -345,6 +348,16 @@
   }
   function closePwd() { document.getElementById('pwd-overlay').style.display = 'none'; }
   document.getElementById('pwd-overlay').addEventListener('click', function(e){ if(e.target===this) closePwd(); });
+
+  // ── Restore tab on page refresh ────────────────────────────────────
+  (function(){
+    var savedTab, pwdOk;
+    try { savedTab = localStorage.getItem('qa_active_tab'); pwdOk = localStorage.getItem('qa_pwd_ok'); } catch(e){}
+    if ((savedTab === 'mgr' || savedTab === 'rpt') && pwdOk === '1') {
+      // Password was already entered this session — restore directly
+      switchTab(savedTab);
+    }
+  })();
 
   // ── Helpers ────────────────────────────────────────────────────────
   function calcScore() {
