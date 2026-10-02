@@ -233,8 +233,8 @@
     </div>
   </div>
   <div style="background:var(--gl);border:1px solid var(--bd);border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:12px;color:var(--gd);line-height:1.7;">
-    <strong>Scoring Rule:</strong> The <strong>Actual Average Grade</strong> is computed as the
-    <strong>Total Score ÷ sessions covered by the selected date</strong> (total of all 5 evaluator scores divided by the sessions from the selected dates).
+    <strong>Scoring Rule:</strong> The <strong>Actual Average Grade (%)</strong> is computed as
+    <strong>Total Score ÷ (Sessions × 5)</strong> — the sum of all 5 evaluator scores across all sessions in the selected date range, divided by the number of sessions multiplied by 5 evaluators, expressed as a percentage out of 100.
     The grade is only computed once <strong>all 5 Candidate Support Team Members</strong> have submitted their evaluation for that proctor within the selected date range.
     Proctors with missing evaluations are marked as <strong>Incomplete</strong>.
   </div>
@@ -717,23 +717,24 @@
       if(ev) evalSet[ev]=true;
     });
     var allEvaluators=Object.keys(evalSet).sort();
+
+    // Group by proctor → evaluator → array of scores (one per session)
+    // byProctor[proctor][evaluator] = [score1, score2, ...]
     var byProctor={};
     _rows.forEach(function(row){
-      // Filter by Session Date (row[2]) — the date of the proctored session
       var d=parseDate(row[2]);
-      if (!d) {
-        // Fallback: try Date Evaluated (row[5])
-        d=parseDate(row[5]);
-      }
+      if (!d) d=parseDate(row[5]);
       if (!d) return;
       if (start&&d<start) return;
       if (end&&d>end) return;
       var p=String(row[1]||'').trim(); if(!p) return;
       var s=parseFloat(row[15]); if(isNaN(s)) return;
-      var evaluator=String(row[7]||'').trim();
-      if(!byProctor[p]) byProctor[p]=[];
-      byProctor[p].push({score:s, evaluator:evaluator});
+      var ev=String(row[7]||'').trim(); if(!ev) return;
+      if(!byProctor[p]) byProctor[p]={};
+      if(!byProctor[p][ev]) byProctor[p][ev]=[];
+      byProctor[p][ev].push(s);
     });
+
     var proctors=Object.keys(byProctor);
     if (!proctors.length) {
       rptTbl.innerHTML='<div class="empty">No sessions found for the selected period.</div>';
@@ -742,85 +743,93 @@
     var rl=function(s){ return s>=90?'Excellent':s>=75?'Good':s>=50?'Needs Improvement':s>0?'Unsatisfactory':'—'; };
     var rb=function(s){ return s>=90?'b-exc':s>=75?'b-good':s>=50?'b-rni':'b-unsat'; };
 
-    // Pre-compute avg for each proctor so we can sort
-    var proctorAvg={};
+    // Pre-compute for sorting: sessions = max entries any evaluator has for this proctor
+    // Total Score = sum of ALL scores from ALL evaluators
+    // Actual Average = Total Score ÷ sessions
+    var proctorStats={};
     proctors.forEach(function(proctor){
-      var entries=byProctor[proctor];
-      var evalMap={};
-      entries.forEach(function(e){ evalMap[e.evaluator]=e.score; });
-      var allSubmitted=allEvaluators.every(function(ev){ return evalMap[ev]!==undefined; });
-      if(allSubmitted){
-        var total=entries.reduce(function(s,e){return s+e.score;},0);
-        proctorAvg[proctor]=Math.round((total/5)*100)/100;
-      } else {
-        proctorAvg[proctor]=-1; // incomplete goes to bottom
-      }
+      var evMap=byProctor[proctor];
+      var sessions=0;
+      allEvaluators.forEach(function(ev){
+        if(evMap[ev]) sessions=Math.max(sessions, evMap[ev].length);
+      });
+      var allSubmitted=allEvaluators.every(function(ev){ return evMap[ev]&&evMap[ev].length>0; });
+      var totalScore=0;
+      allEvaluators.forEach(function(ev){
+        if(evMap[ev]) evMap[ev].forEach(function(s){ totalScore+=s; });
+      });
+      // Actual Average as % out of 100:
+      // Each session has 5 evaluators each scoring out of 100 → max per session = 500
+      // Actual Average = Total Score ÷ (Sessions × 5) × 100... simplifies to Total Score ÷ Sessions ÷ 5
+      var numEvals=allEvaluators.length||5;
+      var avg=allSubmitted&&sessions>0 ? Math.round((totalScore/(sessions*numEvals))*100)/100 : -1;
+      proctorStats[proctor]={sessions:sessions, totalScore:totalScore, avg:avg, allSubmitted:allSubmitted};
     });
 
-    // Sort proctors: Complete (highest avg first), then Incomplete at bottom
-    proctors.sort(function(a,b){ return proctorAvg[b]-proctorAvg[a]; });
+    // Sort: complete highest→lowest, incomplete at bottom
+    proctors.sort(function(a,b){ return proctorStats[b].avg - proctorStats[a].avg; });
 
     _reportData=[];
     var html='<div style="font-size:12px;color:var(--tm);margin-bottom:12px;font-weight:600;">📅 '+periodLabel+'</div>';
 
-    // Fixed equal width for evaluator columns (120px each)
     var evalColWidth=120;
     var colgroup='<colgroup><col style="width:35px"><col style="width:130px"><col style="width:70px">';
     allEvaluators.forEach(function(){ colgroup+='<col style="width:'+evalColWidth+'px">'; });
-    colgroup+='<col style="width:80px"><col style="width:90px"><col style="width:80px"><col style="width:80px"></colgroup>';
+    colgroup+='<col style="width:90px"><col style="width:100px"><col style="width:90px"><col style="width:90px"></colgroup>';
 
-    // Build header — one column per evaluator
     html+='<table>'+colgroup+'<thead><tr><th>#</th><th>Proctor</th><th style="text-align:center">Sessions</th>';
     allEvaluators.forEach(function(ev){ html+='<th style="text-align:center">'+ev+'</th>'; });
     html+='<th style="text-align:center">Total Score</th><th style="text-align:center">Actual Average</th><th style="text-align:center">Rating</th><th style="text-align:center">Status</th></tr></thead><tbody>';
 
     proctors.forEach(function(proctor,i){
-      var entries=byProctor[proctor].slice();
-      var count=entries.length;
+      var evMap=byProctor[proctor];
+      var stats=proctorStats[proctor];
+      var sessions=stats.sessions;
+      var totalScore=stats.totalScore;
+      var allSubmitted=stats.allSubmitted;
+      var missingEvals=allEvaluators.filter(function(ev){ return !evMap[ev]||evMap[ev].length===0; });
 
-      // Map evaluator → score for this proctor
-      var evalMap={};
-      entries.forEach(function(e){ evalMap[e.evaluator]=e.score; });
-
-      // Check if ALL 5 evaluators have submitted
-      var allSubmitted=allEvaluators.every(function(ev){ return evalMap[ev]!==undefined; });
-      var missingEvals=allEvaluators.filter(function(ev){ return evalMap[ev]===undefined; });
-
-      // Build evaluator cells — equal width, centered
+      // Build evaluator cells — show sum of all their scores for this proctor
       var evalCells=allEvaluators.map(function(ev){
-        var hasScore=evalMap[ev]!==undefined;
-        return '<td style="text-align:center;font-size:13px;font-weight:600;color:'+(hasScore?'var(--gd)':'#c0392b')+';">'+(hasScore?evalMap[ev]:'—')+'</td>';
+        var scores=evMap[ev]||[];
+        var hasScore=scores.length>0;
+        var evTotal=scores.reduce(function(a,b){return a+b;},0);
+        return '<td style="text-align:center;font-size:12px;font-weight:600;color:'+(hasScore?'var(--gd)':'#c0392b')+';">'
+          +(hasScore?evTotal+'<span style="font-size:9px;font-weight:400;color:var(--tm);display:block;">('+scores.length+' session'+(scores.length!==1?'s':'')+')</span>':'—')
+          +'</td>';
       }).join('');
 
-      var allScoresText=allEvaluators.map(function(ev){ return ev+': '+(evalMap[ev]!==undefined?evalMap[ev]:'—'); }).join(', ');
+      var allScoresText=allEvaluators.map(function(ev){
+        var scores=evMap[ev]||[];
+        return ev+': '+(scores.length>0?scores.join(', '):'—');
+      }).join(' | ');
       var row;
 
       if (!allSubmitted) {
-        var totalSoFar=entries.reduce(function(s,e){return s+e.score;},0);
-        row={proctor:proctor,count:count,scores:allScoresText,evaluators:allScoresText,
+        row={proctor:proctor,count:sessions,scores:allScoresText,evaluators:allScoresText,
           high:'—',low:'—',used:'—',avg:'—',rating:'—',status:'Incomplete'};
         html+='<tr style="background:#fffbeb;">'
           +'<td>'+(i+1)+'</td>'
           +'<td><strong>'+proctor+'</strong></td>'
-          +'<td style="text-align:center">'+count+'/5</td>'
+          +'<td style="text-align:center">'+sessions+'</td>'
           +evalCells
-          +'<td style="text-align:center;color:var(--tm);font-size:11px">'+totalSoFar+'</td>'
+          +'<td style="text-align:center;font-weight:600;color:var(--tm)">'+totalScore+'</td>'
           +'<td style="color:#856404;font-style:italic;font-size:11px;text-align:center">⚠ Pending:<br>'+missingEvals.join('<br>')+'</td>'
           +'<td style="text-align:center">—</td>'
           +'<td style="text-align:center"><span class="bp b-ni">Incomplete</span></td>'
           +'</tr>';
       } else {
-        var total=entries.reduce(function(s,e){return s+e.score;},0);
-        var avg=proctorAvg[proctor];
-        row={proctor:proctor,count:count,scores:allScoresText,evaluators:allScoresText,
+        // Actual Average = Total Score ÷ sessions in selected date range
+        var avg=stats.avg;
+        row={proctor:proctor,count:sessions,scores:allScoresText,evaluators:allScoresText,
           high:'—',low:'—',used:'—',avg:avg,rating:rl(avg),status:'Complete'};
         html+='<tr>'
           +'<td>'+(i+1)+'</td>'
           +'<td><strong>'+proctor+'</strong></td>'
-          +'<td style="text-align:center">'+count+'/5</td>'
+          +'<td style="text-align:center">'+sessions+'</td>'
           +evalCells
-          +'<td style="text-align:center;font-weight:600;color:var(--gd)">'+total+'</td>'
-          +'<td style="font-family:\'Space Grotesk\',sans-serif;font-weight:700;font-size:15px;color:var(--gd);text-align:center">'+avg.toFixed(2)+'</td>'
+          +'<td style="text-align:center;font-weight:600;color:var(--gd)">'+totalScore+'</td>'
+          +'<td style="font-family:\'Space Grotesk\',sans-serif;font-weight:700;font-size:15px;color:var(--gd);text-align:center">'+avg.toFixed(2)+'%</td>'
           +'<td style="text-align:center"><span class="bp '+rb(avg)+'">'+rl(avg)+'</span></td>'
           +'<td style="text-align:center"><span class="bp b-pass">Complete</span></td>'
           +'</tr>';
